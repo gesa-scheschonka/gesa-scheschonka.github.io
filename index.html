@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f0e8" />
+    <meta
+      name="description"
+      content="Portfolio for public relations, brand communications and creative activations."
+    />
+    <title>Gesa Scheschonka — PR & Communications</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%231438f0'/%3E%3Ctext x='50' y='61' text-anchor='middle' font-family='Arial' font-size='43' font-weight='700' fill='%23f3f0e8'%3EGS%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css?v=20260804-2" />
+    <script>
+      window.addEventListener("DOMContentLoaded", async () => {
+        const version = Date.now();
+        const loadScript = (source) =>
+          new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = `${source}?v=${version}`;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error(`Could not load ${source}`));
+            document.head.append(script);
+          });
+
+        try {
+          await loadScript("consent.js");
+          await Promise.all([
+            loadScript("content/content.js"),
+            loadScript("content/cv.js"),
+          ]);
+          await loadScript("script.js");
+        } catch (error) {
+          console.error(error);
+          document.body.insertAdjacentHTML(
+            "afterbegin",
+            '<p class="content-error">The website content could not be loaded. Please refresh the page.</p>',
+          );
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="Back to the top">
+        <span data-site="firstName">Vorname</span>
+        <span class="wordmark-dot" aria-hidden="true"></span>
+        <span data-site="lastName">Nachname</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span>Menu</span>
+        <span class="menu-mark" aria-hidden="true"></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav">
+        <a href="#work">Work</a>
+        <a href="#clients">Clients</a>
+        <a href="#about">About</a>
+        <a href="#vita">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-kicker reveal">
+          <span data-site="location">Berlin</span>
+          <span>PR · Communications · Culture</span>
+        </div>
+
+        <h1 id="hero-title" class="reveal" data-site="heroTitle">
+          I shape how brands show up in culture
+        </h1>
+
+        <div class="hero-bottom reveal">
+          <p data-site="heroIntro">
+            Strategic communication, integrated campaigns, partnerships and brand experiences.
+          </p>
+          <a class="circle-link" href="#work" aria-label="View selected work">
+            <span>Work</span>
+            <span class="ui-arrow ui-arrow--se" aria-hidden="true"></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="statement section-pad" aria-label="Profile">
+        <p class="section-label reveal">What I do</p>
+        <p class="statement-copy reveal" data-site="statement">
+          I translate strategy into stories, relationships and experiences — with a clear sense
+          of audience, timing and cultural relevance
+        </p>
+        <div class="statement-meta reveal">
+          <span>Strategy</span>
+          <span>Relations</span>
+          <span>Experiences</span>
+          <span>Storytelling</span>
+        </div>
+      </section>
+
+      <section class="work section-pad" id="work" aria-labelledby="work-title">
+        <div class="section-intro">
+          <p class="section-label reveal">Selected work</p>
+          <h2 id="work-title" class="reveal">Work<span>.</span></h2>
+          <p class="work-count reveal"><span id="project-count">00</span> Pieces</p>
+        </div>
+
+        <div class="project-list" id="project-list" aria-live="polite"></div>
+      </section>
+
+      <section class="clients section-pad" id="clients" aria-labelledby="clients-title">
+        <div class="clients-heading">
+          <p class="section-label reveal">Brands & Partners</p>
+          <h2 id="clients-title" class="reveal">Clients<span>.</span></h2>
+        </div>
+        <div class="client-grid" id="client-grid" aria-label="Selected client logos"></div>
+      </section>
+
+      <section class="about section-pad" id="about" aria-labelledby="about-title">
+        <div class="about-title-wrap reveal">
+          <p class="section-label">About</p>
+          <h2 id="about-title">
+            <span>Curiosity shapes</span>
+            <em>how I work.</em>
+          </h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-visual reveal">
+            <img
+              class="about-portrait"
+              src="assets/images/gesa-profile-refined.png"
+              alt="Portrait of Gesa Scheschonka"
+              loading="lazy"
+            />
+            <span class="portrait-light" aria-hidden="true"></span>
+          </div>
+          <div class="about-copy reveal">
+            <p class="about-lead" data-site="aboutLead">
+              I combine a clear strategic perspective with a close eye for execution — from the
+              first question to the final guest.
+            </p>
+            <p data-site="aboutBody">
+              My background spans beauty, fashion, lifestyle and design — fields where people,
+              context and detail give communication and conversations its direction.
+            </p>
+            <a class="text-link" href="#contact">Work together <span class="ui-arrow" aria-hidden="true"></span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="vita section-pad" id="vita" aria-labelledby="vita-title">
+        <div class="vita-heading">
+          <p class="section-label reveal">Experience & Education</p>
+          <h2 id="vita-title" class="reveal">CV<span>.</span></h2>
+          <a class="download-link reveal" data-site-link="cvUrl" href="#" hidden>
+            Download CV <span class="ui-arrow ui-arrow--down" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </section>
+
+      <section class="contact section-pad" id="contact" aria-labelledby="contact-title">
+        <p class="section-label reveal">Contact</p>
+        <h2 id="contact-title" class="reveal">
+          Ready to tell<br />
+          <em>a great story?</em>
+        </h2>
+        <a class="contact-email reveal" data-site-link="email" href="mailto:hello@example.com">
+          <span data-site="email">hello@example.com</span>
+          <span class="ui-arrow" aria-hidden="true"></span>
+        </a>
+        <div class="contact-meta reveal">
+          <span data-site="location">Berlin</span>
+          <div class="social-links" id="social-links"></div>
+        </div>
+      </section>
+
+      <section class="legal-strip" aria-label="Legal information">
+        <p>Legal & Transparency</p>
+        <div>
+          <a href="impressum.html">Legal notice <span class="ui-arrow" aria-hidden="true"></span></a>
+          <a href="datenschutz.html">Privacy <span class="ui-arrow" aria-hidden="true"></span></a>
+          <button
+            class="privacy-settings-link"
+            type="button"
+            data-privacy-settings
+            aria-controls="privacy-panel"
+            aria-expanded="false"
+          >Privacy settings</button>
+        </div>
+        <p>No site analytics · Instagram only with consent</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span id="current-year"></span> <span data-site="firstName">Vorname</span> <span data-site="lastName">Nachname</span></span>
+      <div>
+        <a href="#top">Back to top <span class="ui-arrow ui-arrow--up" aria-hidden="true"></span></a>
+      </div>
+    </footer>
+
+    <dialog class="project-dialog" id="project-dialog">
+      <button class="dialog-close" type="button" aria-label="Close project"></button>
+      <div id="dialog-content"></div>
+    </dialog>
+
+    <section
+      class="privacy-panel"
+      id="privacy-panel"
+      role="region"
+      aria-labelledby="privacy-panel-title"
+      aria-describedby="privacy-panel-description"
+      hidden
+    >
+      <button class="privacy-panel-close" type="button" data-privacy-close>Close</button>
+      <div class="privacy-panel-copy">
+        <p class="section-label">Privacy settings</p>
+        <h2 id="privacy-panel-title">Instagram content</h2>
+        <p id="privacy-panel-description">
+          Some project visuals are embedded from Instagram. They remain blocked unless you consent.
+          If enabled, your browser connects to Meta Platforms Ireland Limited, which may receive
+          technical and interaction data, use cookies or similar technologies, and transfer data
+          outside the EEA, including to the United States. Your choice applies to every Instagram
+          post on this site, is remembered for up to 180 days where browser storage is available,
+          and can be changed at any time in Privacy settings.
+          <a href="datenschutz.html">Read the privacy policy</a>.
+        </p>
+        <p class="privacy-current" data-privacy-current aria-live="polite"></p>
+      </div>
+      <div class="privacy-panel-actions">
+        <button type="button" data-instagram-consent="false" data-instagram-block-label>Keep blocked</button>
+        <button class="is-primary" type="button" data-instagram-consent="true">
+          Allow Instagram
+        </button>
+      </div>
+    </section>
+
+    <noscript>
+      <p class="noscript">Please enable JavaScript to view projects and CV entries.</p>
+    </noscript>
+  </body>
+</html>
