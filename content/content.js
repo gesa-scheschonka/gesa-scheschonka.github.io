@@ -556,6 +556,7 @@ const PROJECTS = [
         alt: "Candlelit Armani Beauty dinner tables inside The Feuerle Collection",
         label: "Dinner atmosphere",
         hero: true,
+        size: "lg",
       },
       {
         type: "video",
@@ -600,6 +601,7 @@ const PROJECTS = [
         alt: "Long candlelit dinner table with flowers and red architectural lighting",
         label: "Table setting",
         hero: true,
+        size: "lg",
       },
       {
         type: "image",
@@ -614,6 +616,7 @@ const PROJECTS = [
         alt: "Red Armani Beauty logo projected onto a concrete column",
         label: "Architectural branding",
         hero: true,
+        size: "lg",
       },
       {
         type: "image",

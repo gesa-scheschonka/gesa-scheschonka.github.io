@@ -100,7 +100,7 @@
     const y = safeCropNumber(crop.y, 0, -10, 10);
     const mobileY = safeCropNumber(crop.mobileY, y, -10, 10);
 
-    return ` style="--ig-card-media-height:${mediaHeight.toFixed(3)}cqw;--ig-card-scale:${scale};--ig-card-mobile-scale:${mobileScale};--ig-card-x:${x}rem;--ig-card-mobile-x:${mobileX}rem;--ig-card-y:${y}rem;--ig-card-mobile-y:${mobileY}rem"`;
+    return ` style="aspect-ratio:${aspectWidth} / ${aspectHeight};--ig-card-media-height:${mediaHeight.toFixed(3)}cqw;--ig-card-scale:${scale};--ig-card-mobile-scale:${mobileScale};--ig-card-x:${x}rem;--ig-card-mobile-x:${mobileX}rem;--ig-card-y:${y}rem;--ig-card-mobile-y:${mobileY}rem"`;
   };
 
   const instagramDialogStyle = (project) => {
@@ -224,25 +224,25 @@
 
   const projectCardLayouts = [
     "full",
-    "portrait",
-    "landscape",
     "landscape",
     "portrait",
     "half",
+    "portrait",
+    "landscape",
     "half",
-    "portrait",
-    "portrait",
-    "portrait",
     "portrait",
     "full",
+    "half",
     "landscape",
     "portrait",
+    "half",
     "portrait",
     "landscape",
     "full",
     "portrait",
-    "landscape",
     "half",
+    "landscape",
+    "portrait",
     "half",
   ];
 
@@ -348,23 +348,44 @@
     </div>`;
   };
 
+  const declumpVideos = (items) => {
+    const videos = items.filter((item) => item.type === "video");
+    const rest = items.filter((item) => item.type !== "video");
+    if (!videos.length || !rest.length) return items;
+
+    const result = [...rest];
+    const step = (rest.length + 1) / (videos.length + 1);
+    videos.forEach((video, index) => {
+      const position = Math.min(result.length, Math.round(step * (index + 1)));
+      result.splice(position, 0, video);
+    });
+    return result;
+  };
+
+  const collageSizeCycle = ["md", "sm", "sm", "md", "sm", "sm"];
+
   const localMediaHero = (project) => {
     const allItems = localProjectMedia(project);
     const selectedItems = allItems.filter((item) => item.hero);
-    const heroItems = selectedItems.length ? selectedItems : allItems;
+    const heroItems = declumpVideos(selectedItems.length ? selectedItems : allItems);
     if (!heroItems.length) return "";
+
+    let imageIndex = 0;
 
     return `<div class="dialog-private-collage" aria-label="Selected event atmosphere">
       ${heroItems
-        .map(
-          (item, index) => `<figure class="dialog-private-collage-item dialog-private-collage-item--${index + 1} dialog-private-collage-item--${item.type}">
+        .map((item, index) => {
+          const isVideo = item.type === "video";
+          const size = isVideo ? "lg" : item.size || collageSizeCycle[imageIndex++ % collageSizeCycle.length];
+
+          return `<figure class="dialog-private-collage-item dialog-private-collage-item--${item.type} dialog-private-collage-item--${size}">
             ${localMediaElement(item, {
               context: "dialog",
               eager: index < 4,
-              autoplay: item.type === "video",
+              autoplay: isVideo,
             })}
-          </figure>`,
-        )
+          </figure>`;
+        })
         .join("")}
     </div>`;
   };
