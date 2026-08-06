@@ -19,6 +19,10 @@
   const timeline = document.querySelector("#timeline");
   const dialog = document.querySelector("#project-dialog");
   const dialogContent = document.querySelector("#dialog-content");
+  const dialogIndex = document.querySelector("#dialog-index");
+  const dialogPrevBtn = document.querySelector("[data-dialog-prev]");
+  const dialogNextBtn = document.querySelector("[data-dialog-next]");
+  const cursorFlag = document.querySelector("#cursor-flag");
   const menuToggle = document.querySelector(".menu-toggle");
   const siteNav = document.querySelector(".site-nav");
   const privacyPanel = document.querySelector("#privacy-panel");
@@ -846,6 +850,12 @@
       ></button>
       <figure class="project-image-wrap">
         ${projectVisual(project, "card", index < 2)}
+        <span class="project-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+        <span class="project-tag">${escapeHTML(projectType(project))}</span>
+        <span class="project-view-cta" aria-hidden="true">
+          <span>View case</span>
+          <span class="ui-arrow ui-arrow--se"></span>
+        </span>
         ${
           hasLicensedImage(project)
             ? `<span class="project-image-credit">${escapeHTML(project.imageCredit)}</span>`
@@ -853,7 +863,7 @@
         }
       </figure>
       <div class="project-info">
-        <h3>${escapeHTML(project.name)}</h3>
+        <h3>${escapeHTML(project.name)} <span class="ui-arrow ui-arrow--se" aria-hidden="true"></span></h3>
         <p class="project-date">
           ${escapeHTML(formatDate(project.year, project.month))}
           ${project.location ? `<span>${escapeHTML(project.location)}</span>` : ""}
@@ -1099,7 +1109,17 @@
       ?.querySelector("[data-instagram-carousel]");
     const targetCarousel = dialogContent.querySelector("[data-instagram-carousel]");
     moveLoadedInstagramVisual(sourceCarousel, targetCarousel);
-    dialog.showModal();
+
+    const currentIndex = sortedProjects.findIndex((item) => item.id === project.id);
+    const previousProject = sortedProjects[(currentIndex - 1 + sortedProjects.length) % sortedProjects.length];
+    const nextProject = sortedProjects[(currentIndex + 1) % sortedProjects.length];
+    if (dialogIndex) {
+      dialogIndex.textContent = `${String(currentIndex + 1).padStart(2, "0")} / ${String(sortedProjects.length).padStart(2, "0")}`;
+    }
+    if (dialogPrevBtn) dialogPrevBtn.dataset.projectId = previousProject.id;
+    if (dialogNextBtn) dialogNextBtn.dataset.projectId = nextProject.id;
+
+    if (!dialog.open) dialog.showModal();
     document.body.classList.add("dialog-is-open");
     hydrateInstagramEmbeds(dialogContent);
 
@@ -1144,6 +1164,21 @@
     }
   });
 
+  const navigateDialog = (projectId) => {
+    if (!projectId) return;
+    prepareProjectDialogClose();
+    openProject(projectId);
+  };
+
+  dialogPrevBtn?.addEventListener("click", () => navigateDialog(dialogPrevBtn.dataset.projectId));
+  dialogNextBtn?.addEventListener("click", () => navigateDialog(dialogNextBtn.dataset.projectId));
+
+  dialog.addEventListener("keydown", (event) => {
+    if (!dialog.open) return;
+    if (event.key === "ArrowRight") navigateDialog(dialogNextBtn?.dataset.projectId);
+    else if (event.key === "ArrowLeft") navigateDialog(dialogPrevBtn?.dataset.projectId);
+  });
+
   dialogContent.addEventListener("click", (event) => {
     const previous = event.target.closest("[data-instagram-carousel-previous]");
     const next = event.target.closest("[data-instagram-carousel-next]");
@@ -1163,6 +1198,37 @@
     const button = event.target.closest("[data-project-id]");
     if (button) openProject(button.dataset.projectId);
   });
+
+  if (cursorFlag && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let activeCard = null;
+    let pendingEvent = null;
+
+    const paintCursorFlag = () => {
+      pendingEvent = null;
+      if (!activeCard) return;
+      cursorFlag.style.left = `${lastPointerX}px`;
+      cursorFlag.style.top = `${lastPointerY}px`;
+    };
+
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+
+    projectList.addEventListener("pointermove", (event) => {
+      const card = event.target.closest(".project-card");
+      if (card !== activeCard) {
+        activeCard = card;
+        cursorFlag.classList.toggle("is-visible", Boolean(card));
+      }
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      if (!pendingEvent) pendingEvent = window.requestAnimationFrame(paintCursorFlag);
+    });
+
+    projectList.addEventListener("pointerleave", () => {
+      activeCard = null;
+      cursorFlag.classList.remove("is-visible");
+    });
+  }
 
   timeline.addEventListener("click", (event) => {
     const button = event.target.closest(".timeline-toggle");
