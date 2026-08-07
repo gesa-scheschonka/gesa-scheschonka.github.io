@@ -27,7 +27,6 @@
           });
 
         try {
-          await loadScript("consent.js");
           await Promise.all([
             loadScript("content/content.js"),
             loadScript("content/cv.js"),
@@ -188,15 +187,8 @@
         <div>
           <a href="impressum.html">Legal notice <span class="ui-arrow" aria-hidden="true"></span></a>
           <a href="datenschutz.html">Privacy <span class="ui-arrow" aria-hidden="true"></span></a>
-          <button
-            class="privacy-settings-link"
-            type="button"
-            data-privacy-settings
-            aria-controls="privacy-panel"
-            aria-expanded="false"
-          >Privacy settings</button>
         </div>
-        <p>No site analytics · Instagram only with consent</p>
+        <p>No site analytics · No third-party embeds</p>
       </section>
     </main>
 
@@ -224,37 +216,6 @@
       </div>
       <div id="dialog-content"></div>
     </dialog>
-
-    <section
-      class="privacy-panel"
-      id="privacy-panel"
-      role="region"
-      aria-labelledby="privacy-panel-title"
-      aria-describedby="privacy-panel-description"
-      hidden
-    >
-      <button class="privacy-panel-close" type="button" data-privacy-close>Close</button>
-      <div class="privacy-panel-copy">
-        <p class="section-label">Privacy settings</p>
-        <h2 id="privacy-panel-title">Instagram content</h2>
-        <p id="privacy-panel-description">
-          Some project visuals are embedded from Instagram. They remain blocked unless you consent.
-          If enabled, your browser connects to Meta Platforms Ireland Limited, which may receive
-          technical and interaction data, use cookies or similar technologies, and transfer data
-          outside the EEA, including to the United States. Your choice applies to every Instagram
-          post on this site, is remembered for up to 180 days where browser storage is available,
-          and can be changed at any time in Privacy settings.
-          <a href="datenschutz.html">Read the privacy policy</a>.
-        </p>
-        <p class="privacy-current" data-privacy-current aria-live="polite"></p>
-      </div>
-      <div class="privacy-panel-actions">
-        <button type="button" data-instagram-consent="false" data-instagram-block-label>Keep blocked</button>
-        <button class="is-primary" type="button" data-instagram-consent="true">
-          Allow Instagram
-        </button>
-      </div>
-    </section>
 
     <noscript>
       <p class="noscript">Please enable JavaScript to view projects and CV entries.</p>

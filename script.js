@@ -24,11 +24,6 @@
   const dialogNextBtn = document.querySelector("[data-dialog-next]");
   const menuToggle = document.querySelector(".menu-toggle");
   const siteNav = document.querySelector(".site-nav");
-  const privacyPanel = document.querySelector("#privacy-panel");
-  const privacyCurrent = document.querySelector("[data-privacy-current]");
-  const privacyBlockLabel = document.querySelector("[data-instagram-block-label]");
-  const privacy = window.PORTFOLIO_PRIVACY;
-
   const escapeHTML = (value = "") =>
     String(value)
       .replaceAll("&", "&amp;")
@@ -46,146 +41,9 @@
     }).format(date);
   };
 
-  const normaliseInstagramPost = (value = "") => {
-    try {
-      const url = new URL(value);
-      const host = url.hostname.toLowerCase();
-      const match = url.pathname.match(/^\/(p|reel)\/([a-z0-9_-]+)\/?$/i);
-
-      if (!["instagram.com", "www.instagram.com"].includes(host) || !match) return null;
-
-      return {
-        type: match[1].toLowerCase(),
-        code: match[2],
-        url: `https://www.instagram.com/${match[1].toLowerCase()}/${match[2]}/`,
-      };
-    } catch (_error) {
-      return null;
-    }
-  };
-
-  const instagramPosts = (project) => {
-    const extraSlides = Array.isArray(project.instagram?.slides) ? project.instagram.slides : [];
-    const values = [project.instagram?.url, ...extraSlides];
-    const seen = new Set();
-
-    return values.reduce((posts, value) => {
-      const post = normaliseInstagramPost(value);
-      if (!post || seen.has(post.url)) return posts;
-      seen.add(post.url);
-      posts.push(post);
-      return posts;
-    }, []);
-  };
-
-  const hasInstagramPost = (project) => instagramPosts(project).length > 0;
-
   const safeCropNumber = (value, fallback, minimum, maximum) => {
     const number = Number(value);
     return Number.isFinite(number) ? Math.min(maximum, Math.max(minimum, number)) : fallback;
-  };
-
-  const instagramCardCropStyle = (project, context) => {
-    if (context !== "card") return "";
-
-    const crop = project.instagram?.cardCrop || {};
-    const requestedAspect = project.instagram?.detailAspect;
-    const aspectWidth = safeCropNumber(requestedAspect?.[0], 4, 1, 100);
-    const aspectHeight = safeCropNumber(requestedAspect?.[1], 5, 1, 100);
-    const mediaHeight = (100 * aspectHeight) / aspectWidth;
-    const scale = safeCropNumber(crop.scale, 1, 1, 1.8);
-    const mobileScale = safeCropNumber(crop.mobileScale, scale, 1, 1.8);
-    const x = safeCropNumber(crop.x, 0, -8, 8);
-    const mobileX = safeCropNumber(crop.mobileX, x, -8, 8);
-    const y = safeCropNumber(crop.y, 0, -10, 10);
-    const mobileY = safeCropNumber(crop.mobileY, y, -10, 10);
-
-    return ` style="--ig-card-aspect:${aspectWidth} / ${aspectHeight};--ig-card-media-height:${mediaHeight.toFixed(3)}cqw;--ig-card-scale:${scale};--ig-card-mobile-scale:${mobileScale};--ig-card-x:${x}rem;--ig-card-mobile-x:${mobileX}rem;--ig-card-y:${y}rem;--ig-card-mobile-y:${mobileY}rem"`;
-  };
-
-  const instagramDialogStyle = (project) => {
-    const requestedAspect = project.instagram?.detailAspect;
-    const aspectWidth = safeCropNumber(requestedAspect?.[0], 4, 1, 100);
-    const aspectHeight = safeCropNumber(requestedAspect?.[1], 5, 1, 100);
-    const crop = project.instagram?.detailCrop || {};
-    const scale = safeCropNumber(crop.scale, 1, 1, 1.8);
-    const mobileScale = safeCropNumber(crop.mobileScale, scale, 1, 1.8);
-    const x = safeCropNumber(crop.x, 0, -8, 8);
-    const mobileX = safeCropNumber(crop.mobileX, x, -8, 8);
-    const y = safeCropNumber(crop.y, -3.375, -10, 2);
-    const mobileY = safeCropNumber(crop.mobileY, y, -10, 2);
-    const maxWidth = Math.min(54, 48 * (aspectWidth / aspectHeight));
-    const viewportWidth = 72 * (aspectWidth / aspectHeight);
-
-    return ` style="--ig-detail-aspect:${aspectWidth} / ${aspectHeight};--ig-detail-max-width:${maxWidth.toFixed(3)}rem;--ig-detail-viewport-width:${viewportWidth.toFixed(3)}svh;--ig-detail-scale:${scale};--ig-detail-mobile-scale:${mobileScale};--ig-detail-x:${x}rem;--ig-detail-mobile-x:${mobileX}rem;--ig-detail-y:${y}rem;--ig-detail-mobile-y:${mobileY}rem"`;
-  };
-
-  const instagramGate = (project, requestedPost) => {
-    const post = requestedPost || instagramPosts(project)[0];
-    if (!post) return "";
-
-    return `
-      <div class="instagram-gate">
-        <div class="instagram-gate-heading">
-          <span>${escapeHTML(project.instagram.label || "Instagram post")}</span>
-          <span>${escapeHTML(project.instagram.account || "Instagram")}</span>
-        </div>
-        <strong>${escapeHTML(project.coverTitle || project.name)}</strong>
-        <div class="instagram-gate-copy">
-          <p>Instagram content is blocked until you allow it.</p>
-          <div class="instagram-gate-actions">
-            <button type="button" data-allow-instagram aria-controls="privacy-panel">Review & load</button>
-            <a href="${escapeHTML(post.url)}" target="_blank" rel="noopener noreferrer">Open post</a>
-          </div>
-        </div>
-      </div>
-    `;
-  };
-
-  const instagramVisual = (project, context) => {
-    const posts = instagramPosts(project);
-    if (!posts.length) return "";
-
-    const hasMultiplePosts = posts.length > 1;
-    const hasNativeCarousel = project.instagram?.nativeCarousel === true;
-    const isCarousel = hasMultiplePosts || hasNativeCarousel;
-    const cardAutoplayMs = safeCropNumber(project.instagram?.autoplayMs, 2000, 800, 15000);
-    const detailAutoplayMs = safeCropNumber(
-      project.instagram?.detailAutoplayMs,
-      5000,
-      800,
-      15000,
-    );
-    const autoplayMs = context === "dialog" ? detailAutoplayMs : cardAutoplayMs;
-    return `
-      <div
-        class="instagram-visual instagram-visual--${context}${hasMultiplePosts ? " instagram-carousel" : ""}${hasNativeCarousel ? " instagram-native-carousel" : ""}"
-        data-instagram-carousel
-        data-instagram-index="0"
-        data-instagram-slide-count="${posts.length}"
-        data-instagram-autoplay="${autoplayMs}"
-        data-instagram-card-autoplay="${cardAutoplayMs}"
-        data-instagram-detail-autoplay="${detailAutoplayMs}"
-        data-instagram-native-carousel="${hasNativeCarousel}"
-        ${isCarousel ? 'role="group" aria-roledescription="carousel"' : ""}
-        aria-label="${escapeHTML(`${project.name}${isCarousel ? " carousel" : " Instagram post"}`)}"
-        ${instagramCardCropStyle(project, context)}
-      >
-        ${posts
-          .map(
-            (post, index) => `<div
-              class="instagram-carousel-slide${index === 0 ? " is-active" : ""}"
-              data-instagram-embed
-              data-instagram-post="${escapeHTML(post.url)}"
-              data-instagram-title="${escapeHTML(project.name)}"
-              data-instagram-context="${escapeHTML(context)}"
-              data-instagram-slide-index="${index}"
-              aria-hidden="${index === 0 ? "false" : "true"}"
-            >${index === 0 ? instagramGate(project, post) : ""}</div>`,
-          )
-          .join("")}
-      </div>
-    `;
   };
 
   const applySiteContent = () => {
@@ -458,10 +316,6 @@
       />`;
     }
 
-    if (hasInstagramPost(project)) {
-      return instagramVisual(project, context);
-    }
-
     const theme = String(project.coverTheme || "cobalt").replace(/[^a-z0-9-]/gi, "");
     const variant = Math.min(6, Math.max(1, Number(project.coverVariant) || 1));
 
@@ -573,341 +427,6 @@
     });
   };
 
-  let instagramObserver;
-  const instagramCarouselTimers = new Map();
-  let borrowedInstagramVisual = null;
-  let pendingInstagramProjectId = null;
-
-  const instagramConsent = () => privacy?.getInstagram() ?? null;
-
-  const syncInstagramCarousel = (carousel, requestedIndex) => {
-    const slides = [...carousel.querySelectorAll(".instagram-carousel-slide")];
-    if (!slides.length) return;
-
-    const index = ((Number(requestedIndex) || 0) % slides.length + slides.length) % slides.length;
-    carousel.dataset.instagramIndex = String(index);
-
-    slides.forEach((slide, slideIndex) => {
-      const isActive = slideIndex === index;
-      slide.classList.toggle("is-active", isActive);
-      slide.setAttribute("aria-hidden", String(!isActive));
-    });
-
-    const figure = carousel.closest(".dialog-visual--instagram");
-    const status = figure?.querySelector(".instagram-carousel-status");
-    if (status) status.textContent = `${index + 1} / ${slides.length}`;
-
-    const activePost = slides[index].dataset.instagramPost;
-    const activeLink = figure?.querySelector("[data-instagram-active-link]");
-    if (activeLink && activePost) activeLink.href = activePost;
-    if (slides[index].dataset.instagramLoaded !== "true") loadInstagramEmbed(slides[index]);
-  };
-
-  const stopInstagramCarousel = (carousel) => {
-    const timer = instagramCarouselTimers.get(carousel);
-    if (timer) window.clearInterval(timer);
-    instagramCarouselTimers.delete(carousel);
-  };
-
-  const startInstagramCarousel = (carousel) => {
-    if (instagramConsent() !== true) {
-      stopInstagramCarousel(carousel);
-      return;
-    }
-    if (Number(carousel.dataset.instagramSlideCount) < 2) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (instagramCarouselTimers.has(carousel)) return;
-
-    const slides = [...carousel.querySelectorAll(".instagram-carousel-slide")];
-    if (slides.filter((slide) => slide.dataset.instagramReady === "true").length < 2) return;
-
-    const delay = safeCropNumber(carousel.dataset.instagramAutoplay, 1000, 800, 15000);
-    const timer = window.setInterval(() => {
-      if (!carousel.isConnected) {
-        stopInstagramCarousel(carousel);
-        return;
-      }
-      const currentIndex = Number(carousel.dataset.instagramIndex) || 0;
-      const nextIndex = (currentIndex + 1) % slides.length;
-      if (slides[nextIndex].dataset.instagramReady !== "true") return;
-      syncInstagramCarousel(carousel, nextIndex);
-    }, delay);
-    instagramCarouselTimers.set(carousel, timer);
-  };
-
-  const startInstagramCarousels = (root = document) => {
-    root.querySelectorAll("[data-instagram-carousel]").forEach(startInstagramCarousel);
-  };
-
-  const stopInstagramCarousels = (root = document) => {
-    root.querySelectorAll("[data-instagram-carousel]").forEach(stopInstagramCarousel);
-  };
-
-  const moveLoadedInstagramVisual = (sourceCarousel, targetCarousel) => {
-    restoreBorrowedInstagramVisual();
-    if (!sourceCarousel || !targetCarousel) return;
-
-    stopInstagramCarousel(sourceCarousel);
-    const placeholder = document.createComment("Instagram preview returns here");
-    sourceCarousel.replaceWith(placeholder);
-    targetCarousel.replaceWith(sourceCarousel);
-    sourceCarousel.classList.remove("instagram-visual--card");
-    sourceCarousel.classList.add("instagram-visual--dialog");
-    sourceCarousel.dataset.instagramAutoplay = sourceCarousel.dataset.instagramDetailAutoplay || "5000";
-    sourceCarousel.querySelectorAll("[data-instagram-embed]").forEach((slide) => {
-      slide.dataset.instagramContext = "dialog";
-    });
-    sourceCarousel.querySelectorAll(".instagram-embed-frame").forEach((frame) => {
-      frame.className = "instagram-embed-frame instagram-embed-frame--dialog";
-    });
-    borrowedInstagramVisual = { sourceCarousel, placeholder };
-    syncInstagramCarousel(sourceCarousel, 0);
-  };
-
-  const restoreBorrowedInstagramVisual = () => {
-    if (!borrowedInstagramVisual) return;
-    const { sourceCarousel, placeholder } = borrowedInstagramVisual;
-    sourceCarousel.classList.remove("instagram-visual--dialog");
-    sourceCarousel.classList.add("instagram-visual--card");
-    sourceCarousel.dataset.instagramAutoplay = sourceCarousel.dataset.instagramCardAutoplay || "2000";
-    sourceCarousel.querySelectorAll("[data-instagram-embed]").forEach((slide) => {
-      slide.dataset.instagramContext = "card";
-    });
-    sourceCarousel.querySelectorAll(".instagram-embed-frame").forEach((frame) => {
-      frame.className = "instagram-embed-frame instagram-embed-frame--card";
-    });
-    if (placeholder.isConnected) placeholder.replaceWith(sourceCarousel);
-    borrowedInstagramVisual = null;
-    startInstagramCarousel(sourceCarousel);
-  };
-
-  const loadInstagramEmbed = (container) => {
-    if (!container?.isConnected || container.dataset.instagramLoaded === "true") return;
-    if (instagramConsent() !== true) return;
-
-    const post = normaliseInstagramPost(container.dataset.instagramPost);
-    if (!post) return;
-
-    const context = container.dataset.instagramContext === "dialog" ? "dialog" : "card";
-    const iframe = document.createElement("iframe");
-    iframe.className = `instagram-embed-frame instagram-embed-frame--${context}`;
-    iframe.src = `${post.url}embed/`;
-    iframe.title = `Instagram post for ${container.dataset.instagramTitle || "portfolio project"}`;
-    // The site-level observer already controls when an embed is created. Once
-    // created, load it immediately so browser-native iframe laziness cannot
-    // make a gallery appear to depend on hover or another paint trigger.
-    iframe.loading = "eager";
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-    iframe.allow = "encrypted-media; picture-in-picture; web-share";
-    iframe.setAttribute("frameborder", "0");
-    iframe.setAttribute("scrolling", "no");
-
-    iframe.tabIndex = -1;
-    iframe.setAttribute("aria-hidden", "true");
-
-    iframe.addEventListener("load", () => {
-      if (
-        instagramConsent() !== true ||
-        !iframe.isConnected ||
-        container.dataset.instagramLoaded !== "true"
-      ) {
-        return;
-      }
-      container.dataset.instagramReady = "true";
-      const carousel = container.closest("[data-instagram-carousel]");
-      if (!carousel) return;
-      startInstagramCarousel(carousel);
-
-      // Continue filling the gallery in the background without letting every
-      // hidden Instagram frame compete with the currently visible image.
-      const nextUnloadedSlide = [...carousel.querySelectorAll(".instagram-carousel-slide")].find(
-        (slide) => slide.dataset.instagramLoaded !== "true",
-      );
-      if (nextUnloadedSlide) {
-        const loadNext = () => loadInstagramEmbed(nextUnloadedSlide);
-        if ("requestIdleCallback" in window) {
-          window.requestIdleCallback(loadNext, { timeout: 1200 });
-        } else {
-          window.setTimeout(loadNext, 250);
-        }
-      }
-    });
-
-    container.querySelector(".instagram-gate")?.setAttribute("hidden", "");
-    container.append(iframe);
-    container.dataset.instagramLoaded = "true";
-
-    // A gallery only enters this function after its active card has crossed
-    // the prewarm boundary. Prioritize its next image so autoplay can start,
-    // while later images are loaded progressively by the load handler above.
-    if (container.classList.contains("is-active")) {
-      const carousel = container.closest("[data-instagram-carousel]");
-      const slides = [...(carousel?.querySelectorAll(".instagram-carousel-slide") || [])];
-      const currentIndex = slides.indexOf(container);
-      const nextSlide = slides[(currentIndex + 1) % slides.length];
-      if (nextSlide && nextSlide !== container) loadInstagramEmbed(nextSlide);
-    }
-  };
-
-  const ensureInstagramObserver = () => {
-    if (instagramObserver || !("IntersectionObserver" in window)) return instagramObserver;
-
-    instagramObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          instagramObserver.unobserve(entry.target);
-          loadInstagramEmbed(entry.target);
-        });
-      },
-      { rootMargin: "1200px 0px", threshold: 0.01 },
-    );
-
-    return instagramObserver;
-  };
-
-  const hydrateInstagramEmbeds = (root = document) => {
-    if (instagramConsent() !== true) return;
-
-    root
-      .querySelectorAll('[data-instagram-embed]:not([data-instagram-loaded="true"])')
-      .forEach((container) => {
-        const carousel = container.closest("[data-instagram-carousel]");
-        if (carousel && !container.classList.contains("is-active")) return;
-
-        if (container.dataset.instagramContext === "dialog") {
-          loadInstagramEmbed(container);
-          return;
-        }
-
-        const observer = ensureInstagramObserver();
-        if (observer) observer.observe(container);
-        else loadInstagramEmbed(container);
-      });
-
-    root.querySelectorAll("[data-instagram-carousel]").forEach((carousel) => {
-      const activeSlide = carousel.querySelector(".instagram-carousel-slide.is-active");
-      if (activeSlide?.dataset.instagramReady !== "true") return;
-      const slides = [...carousel.querySelectorAll(".instagram-carousel-slide")];
-      const currentIndex = slides.indexOf(activeSlide);
-      const nextSlide = slides[(currentIndex + 1) % slides.length];
-      if (nextSlide?.dataset.instagramLoaded !== "true") loadInstagramEmbed(nextSlide);
-    });
-    startInstagramCarousels(root);
-  };
-
-  const resetInstagramEmbeds = () => {
-    instagramObserver?.disconnect();
-    instagramObserver = undefined;
-    stopInstagramCarousels();
-
-    document.querySelectorAll("[data-instagram-embed]").forEach((container) => {
-      container.querySelectorAll(".instagram-embed-frame").forEach((frame) => frame.remove());
-      container.querySelector(".instagram-gate")?.removeAttribute("hidden");
-      delete container.dataset.instagramLoaded;
-      delete container.dataset.instagramReady;
-    });
-
-    document.querySelectorAll("[data-instagram-carousel]").forEach((carousel) => {
-      syncInstagramCarousel(carousel, 0);
-    });
-  };
-
-  const updatePrivacyStatus = () => {
-    const choice = instagramConsent();
-    if (privacyCurrent) {
-      privacyCurrent.textContent =
-        choice === true
-          ? "Current choice: Instagram content is allowed."
-          : choice === false
-            ? "Current choice: Instagram content remains blocked."
-            : "No choice saved yet. Instagram content remains blocked.";
-    }
-    if (privacyBlockLabel) {
-      privacyBlockLabel.textContent = choice === true ? "Withdraw & block" : "Keep blocked";
-    }
-  };
-
-  const setPrivacyExpanded = (expanded) => {
-    document.querySelectorAll("[data-privacy-settings]").forEach((trigger) => {
-      trigger.setAttribute("aria-expanded", String(expanded));
-    });
-  };
-
-  const showPrivacyPanel = (moveFocus = false) => {
-    if (!privacyPanel) return;
-    updatePrivacyStatus();
-    privacyPanel.hidden = false;
-    setPrivacyExpanded(true);
-    if (moveFocus) {
-      privacyPanel.querySelector("button")?.focus({ preventScroll: true });
-    }
-  };
-
-  const hidePrivacyPanel = () => {
-    if (privacyPanel) privacyPanel.hidden = true;
-    setPrivacyExpanded(false);
-  };
-
-  const setInstagramConsent = (allowed) => {
-    privacy?.setInstagram(Boolean(allowed));
-    hidePrivacyPanel();
-  };
-
-  const setupPrivacyControls = () => {
-    privacyPanel?.addEventListener("click", (event) => {
-      if (event.target.closest("[data-privacy-close]")) {
-        hidePrivacyPanel();
-        return;
-      }
-      const choice = event.target.closest("[data-instagram-consent]");
-      if (!choice) return;
-      setInstagramConsent(choice.dataset.instagramConsent === "true");
-    });
-
-    document.addEventListener("click", (event) => {
-      const settings = event.target.closest("[data-privacy-settings]");
-      if (settings) {
-        event.preventDefault();
-        showPrivacyPanel(true);
-        return;
-      }
-
-      const allowButton = event.target.closest("[data-allow-instagram]");
-      if (!allowButton) return;
-      event.preventDefault();
-      event.stopPropagation();
-      if (allowButton.closest("dialog[open]")) {
-        pendingInstagramProjectId = dialog.dataset.projectId || null;
-        stopInstagramCarousels(dialogContent);
-        restoreBorrowedInstagramVisual();
-        dialog.close();
-      }
-      showPrivacyPanel(true);
-    });
-
-    window.addEventListener("portfolio:privacychange", (event) => {
-      updatePrivacyStatus();
-      if (event.detail?.instagram === true) {
-        hydrateInstagramEmbeds();
-        if (pendingInstagramProjectId) {
-          const projectId = pendingInstagramProjectId;
-          pendingInstagramProjectId = null;
-          openProject(projectId);
-        }
-      } else {
-        pendingInstagramProjectId = null;
-        resetInstagramEmbeds();
-      }
-    });
-
-    if (instagramConsent() === null || window.location.hash === "#privacy-settings") {
-      showPrivacyPanel(false);
-    } else {
-      hidePrivacyPanel();
-    }
-  };
-
   const projectCard = (project, index, card) => `
     <article
       class="project-card${card ? "" : " project-card--hero"} reveal"
@@ -959,7 +478,6 @@
 
     observeReveals();
     setupProjectMediaReels(projectList);
-    hydrateInstagramEmbeds(projectList);
   };
 
   const renderClients = () => {
@@ -1062,18 +580,9 @@
   const openProject = (id) => {
     const project = projects.find((item) => item.id === id);
     if (!project) return;
-    restoreBorrowedInstagramVisual();
 
-    const projectInstagramPosts = instagramPosts(project);
-    const instagramPost = projectInstagramPosts[0];
     const usesLocalMedia = hasLocalProjectMedia(project);
-    const usesInstagram = !usesLocalMedia && !hasLicensedImage(project) && Boolean(instagramPost);
-    const hasMultipleInstagramPosts = usesInstagram && projectInstagramPosts.length > 1;
-    const instagramPostUrls = new Set(projectInstagramPosts.map((post) => post.url));
-    const projectSources = (project.sources || []).filter((source) => {
-      if (!usesInstagram) return true;
-      return !instagramPostUrls.has(normaliseInstagramPost(source.url)?.url);
-    });
+    const projectSources = project.sources || [];
 
     const referenceLinks = projectSources.length
       ? `<div class="dialog-sources">
@@ -1106,38 +615,9 @@
         </div>`
       : "";
 
-    const instagramGalleryTools = hasMultipleInstagramPosts
-      ? `<div class="dialog-instagram-carousel-controls" aria-label="Switch gallery image">
-                  <button
-                    class="instagram-carousel-button instagram-carousel-button--previous"
-                    type="button"
-                    data-instagram-carousel-previous
-                    aria-label="Previous gallery image"
-                  ></button>
-                  <span class="instagram-carousel-status" aria-live="polite">1 / ${projectInstagramPosts.length}</span>
-                  <button
-                    class="instagram-carousel-button instagram-carousel-button--next"
-                    type="button"
-                    data-instagram-carousel-next
-                    aria-label="Next gallery image"
-                  ></button>
-                </div>`
-      : "";
-
-    const visualCaption = usesInstagram
-      ? `<figcaption class="dialog-instagram-action">
-          ${instagramGalleryTools}
-          <a
-            class="dialog-instagram-link"
-            href="${escapeHTML(instagramPost.url)}"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-instagram-active-link
-          >View on Instagram <span class="ui-arrow" aria-hidden="true"></span></a>
-        </figcaption>`
-      : usesLocalMedia
-        ? ""
-        : hasLicensedImage(project)
+    const visualCaption = usesLocalMedia
+      ? ""
+      : hasLicensedImage(project)
         ? `<figcaption class="dialog-image-credit">
             <span class="dialog-image-credit-copy">
               <strong>${escapeHTML(project.imageCredit)}</strong>
@@ -1159,10 +639,7 @@
         : `<figcaption>Original portfolio case cover · linked references below</figcaption>`;
 
     dialogContent.innerHTML = `
-      <figure
-        class="dialog-visual${usesInstagram ? " dialog-visual--instagram" : ""}${usesLocalMedia ? " dialog-visual--private-media" : ""}"
-        ${usesInstagram ? instagramDialogStyle(project) : ""}
-      >
+      <figure class="dialog-visual${usesLocalMedia ? " dialog-visual--private-media" : ""}">
         ${projectVisual(project, "dialog")}
         ${visualCaption}
       </figure>
@@ -1185,12 +662,6 @@
     dialog.setAttribute("aria-labelledby", "dialog-project-title");
     dialog.setAttribute("aria-describedby", "dialog-project-description");
     dialog.dataset.projectId = project.id;
-    const sourceCarousel = document
-      .querySelector(`.project-open[data-project-id="${project.id}"]`)
-      ?.closest(".project-card")
-      ?.querySelector("[data-instagram-carousel]");
-    const targetCarousel = dialogContent.querySelector("[data-instagram-carousel]");
-    moveLoadedInstagramVisual(sourceCarousel, targetCarousel);
 
     const currentIndex = sortedProjects.findIndex((item) => item.id === project.id);
     const previousProject = sortedProjects[(currentIndex - 1 + sortedProjects.length) % sortedProjects.length];
@@ -1203,7 +674,6 @@
 
     if (!dialog.open) dialog.showModal();
     document.body.classList.add("dialog-is-open");
-    hydrateInstagramEmbeds(dialogContent);
 
     const motionVideos = [...dialogContent.querySelectorAll("video")];
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1212,23 +682,15 @@
       if (reduceMotion) video.pause();
       else video.play().catch(() => {});
     });
-
-    const dialogCarousel = dialogContent.querySelector("[data-instagram-carousel]");
-    dialogCarousel?.addEventListener("pointerenter", () => stopInstagramCarousel(dialogCarousel));
-    dialogCarousel?.addEventListener("pointerleave", () => startInstagramCarousel(dialogCarousel));
-    dialogCarousel?.addEventListener("focusin", () => stopInstagramCarousel(dialogCarousel));
-    dialogCarousel?.addEventListener("focusout", () => startInstagramCarousel(dialogCarousel));
   };
 
   const prepareProjectDialogClose = () => {
-    stopInstagramCarousels(dialogContent);
     dialogContent.querySelectorAll("video").forEach((video) => {
       video.pause();
       video.removeAttribute("src");
       video.querySelectorAll("source").forEach((source) => source.removeAttribute("src"));
       video.load();
     });
-    restoreBorrowedInstagramVisual();
   };
 
   document.querySelector(".dialog-close").addEventListener("click", () => {
@@ -1259,21 +721,6 @@
     if (!dialog.open) return;
     if (event.key === "ArrowRight") navigateDialog(dialogNextBtn?.dataset.projectId);
     else if (event.key === "ArrowLeft") navigateDialog(dialogPrevBtn?.dataset.projectId);
-  });
-
-  dialogContent.addEventListener("click", (event) => {
-    const previous = event.target.closest("[data-instagram-carousel-previous]");
-    const next = event.target.closest("[data-instagram-carousel-next]");
-    if (!previous && !next) return;
-
-    const carousel = event.target
-      .closest(".dialog-visual--instagram")
-      ?.querySelector("[data-instagram-carousel]");
-    if (!carousel) return;
-    const direction = next ? 1 : -1;
-    stopInstagramCarousel(carousel);
-    syncInstagramCarousel(carousel, Number(carousel.dataset.instagramIndex) + direction);
-    startInstagramCarousel(carousel);
   });
 
   projectList.addEventListener("click", (event) => {
@@ -1334,7 +781,6 @@
   }
 
   applySiteContent();
-  setupPrivacyControls();
   renderProjects();
   renderClients();
   renderTimeline();

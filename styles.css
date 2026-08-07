@@ -398,15 +398,6 @@ img {
 
 /* Only the visual fills the wrapper — the credit pill is also a child here and
    must keep its own size. */
-.project-card .project-image-wrap > .project-image,
-.project-card .project-image-wrap > .instagram-visual,
-.project-card .project-image-wrap > .case-cover,
-.project-card .project-image-wrap > .project-media-reel,
-.project-card .project-image-wrap > .project-media-collage {
-  width: 100%;
-  height: 100%;
-}
-
 .project-card .project-image-wrap > .project-image {
   object-fit: cover;
 }
@@ -423,11 +414,6 @@ img {
 .project-card--hero .project-image-wrap > .project-image {
   height: auto;
   object-fit: contain;
-}
-
-.project-card--hero .project-image-wrap > .instagram-visual {
-  aspect-ratio: var(--ig-card-aspect, 4 / 5);
-  height: auto;
 }
 
 .project-open {
@@ -566,296 +552,13 @@ img {
 
 /* The row sets each tile's height, so generated covers and media edits just
    fill their wrapper instead of carrying a ratio of their own. */
-.project-card .project-image-wrap > .case-cover,
-.project-card .project-image-wrap > .project-media-reel,
-.project-card .project-image-wrap > .project-media-collage,
-.project-card .project-image-wrap > .instagram-visual {
-  aspect-ratio: auto;
-}
-
 .project-card--hero .project-image-wrap > .case-cover,
 .project-card--hero .project-image-wrap > .project-media-reel,
 .project-card--hero .project-image-wrap > .project-media-collage {
   height: clamp(32rem, 72svh, 58rem);
 }
 
-.instagram-visual {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: var(--accent);
-  transition: transform 800ms cubic-bezier(0.2, 0.7, 0, 1);
-}
-
-.instagram-visual--card {
-  --ig-card-media-height: 125cqw;
-  --ig-card-scale: 1;
-  --ig-card-mobile-scale: var(--ig-card-scale);
-  --ig-card-x: 0rem;
-  --ig-card-mobile-x: var(--ig-card-x);
-  --ig-card-y: 0rem;
-  --ig-card-mobile-y: var(--ig-card-y);
-  container-type: inline-size;
-  isolation: isolate;
-}
-
-.instagram-carousel-slide {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 900ms cubic-bezier(0.45, 0, 0.55, 1);
-}
-
-.instagram-carousel-slide.is-active {
-  z-index: 1;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.instagram-carousel-button {
-  position: relative;
-  width: 2.2rem;
-  height: 2.2rem;
-  flex: 0 0 auto;
-  padding: 0;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-  -webkit-appearance: none;
-  appearance: none;
-  background: rgba(243, 240, 232, 0.94);
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.instagram-carousel-button::before,
-.instagram-carousel-button::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  content: "";
-}
-
-.instagram-carousel-button::before {
-  width: 0.85rem;
-  height: 1.5px;
-  background: currentColor;
-  transform: translate(-50%, -50%);
-}
-
-.instagram-carousel-button::after {
-  width: 0.42rem;
-  height: 0.42rem;
-  border-top: 1.5px solid currentColor;
-  border-right: 1.5px solid currentColor;
-}
-
-.instagram-carousel-button--previous::after {
-  transform: translate(-72%, -50%) rotate(-135deg);
-}
-
-.instagram-carousel-button--next::after {
-  transform: translate(-28%, -50%) rotate(45deg);
-}
-
-.instagram-carousel-button:hover,
-.instagram-carousel-button:focus-visible {
-  background: var(--accent);
-  color: var(--paper);
-  outline: none;
-}
-
-.instagram-carousel-status {
-  min-width: 2.8rem;
-  padding: 0;
-  color: var(--accent);
-  text-align: center;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-}
-
-.instagram-gate {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(1.25rem, 2.5vw, 2.25rem);
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 82% 16%, rgba(255, 255, 255, 0.22), transparent 34%),
-    var(--accent);
-  color: var(--paper);
-}
-
-.instagram-gate[hidden] {
-  display: none;
-}
-
-.instagram-gate::before {
-  position: absolute;
-  right: -15%;
-  bottom: -58%;
-  width: 84%;
-  aspect-ratio: 1;
-  border: 1px solid rgba(243, 240, 232, 0.52);
-  border-radius: 50%;
-  content: "";
-}
-
-.instagram-gate::after {
-  position: absolute;
-  inset: 0;
-  background: url("assets/images/grain.png") repeat;
-  content: "";
-  opacity: 0.2;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-}
-
-.instagram-gate > * {
-  position: relative;
-  z-index: 2;
-}
-
-.instagram-gate-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-left: 3rem;
-  text-transform: uppercase;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-}
-
-.instagram-gate-heading span:last-child {
-  text-align: right;
-}
-
-.instagram-gate strong {
-  max-width: 10ch;
-  font-family: var(--display);
-  font-size: clamp(2rem, 3.4vw, 4.1rem);
-  font-weight: 400;
-  line-height: 0.86;
-  letter-spacing: -0.055em;
-  text-wrap: balance;
-}
-
-.instagram-gate-copy {
-  max-width: 28rem;
-}
-
-.instagram-gate-copy p {
-  max-width: 24rem;
-  margin: 0 0 0.8rem;
-  font-size: 0.68rem;
-  line-height: 1.45;
-}
-
-.instagram-gate-actions {
-  position: relative;
-  z-index: 12;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  pointer-events: auto;
-}
-
-.instagram-gate-actions button,
-.instagram-gate-actions a {
-  position: relative;
-  z-index: 12;
-  display: inline-flex;
-  min-height: 2rem;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid var(--paper);
-  background: transparent;
-  color: var(--paper);
-  text-transform: uppercase;
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-}
-
-.instagram-gate-actions button {
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.instagram-gate-actions button:hover,
-.instagram-gate-actions button:focus-visible,
-.instagram-gate-actions a:hover,
-.instagram-gate-actions a:focus-visible {
-  outline: 2px solid var(--paper);
-  outline-offset: 2px;
-}
-
-.instagram-visual--dialog .instagram-gate {
-  justify-content: flex-end;
-  padding: clamp(0.75rem, 2vw, 1.25rem);
-}
-
-.instagram-visual--dialog .instagram-gate-heading,
-.instagram-visual--dialog .instagram-gate > strong {
-  display: none;
-}
-
-.instagram-visual--dialog .instagram-gate-copy {
-  width: 100%;
-  max-width: none;
-}
-
-.instagram-visual--dialog .instagram-gate-copy p {
-  margin-bottom: 0.6rem;
-}
-
-.instagram-embed-frame {
-  display: block;
-  border: 0;
-  background: white;
-}
-
-.instagram-embed-frame--card {
-  position: absolute;
-  z-index: 0;
-  top: calc(50% - 1.7rem + var(--ig-card-y));
-  left: calc(50% + var(--ig-card-x));
-  width: 100%;
-  height: calc(var(--ig-card-media-height) + 3.4rem);
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(var(--ig-card-scale));
-  transform-origin: 50% 50%;
-}
-
-.instagram-visual--dialog {
-  width: min(100%, var(--ig-detail-max-width), var(--ig-detail-viewport-width));
-  aspect-ratio: var(--ig-detail-aspect);
-  margin-inline: auto;
-  background: var(--accent);
-}
-
-.instagram-embed-frame--dialog {
-  position: absolute;
-  top: var(--ig-detail-y);
-  left: calc(50% + var(--ig-detail-x));
-  width: 100%;
-  height: calc(100% + 12rem);
-  pointer-events: none;
-  transform: translateX(-50%) scale(var(--ig-detail-scale));
-  transform-origin: 50% 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .instagram-carousel-slide,
   .project-media-slide {
     transition: none;
   }
@@ -1167,7 +870,6 @@ img {
 
 @media (hover: hover) and (pointer: fine) {
   .project-card:hover .project-image,
-  .project-card:hover .instagram-visual,
   .project-card:hover .case-cover,
   .project-card:hover .project-image-wrap > .project-media-reel,
   .project-card:hover .project-media-collage {
@@ -1756,149 +1458,6 @@ img {
   color: rgba(17, 17, 17, 0.58);
 }
 
-.legal-strip a,
-.privacy-settings-link {
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid var(--ink);
-}
-
-.privacy-settings-link {
-  padding-right: 0;
-  padding-left: 0;
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  text-transform: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-}
-
-.privacy-settings-link:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 0.35rem;
-}
-
-.privacy-panel {
-  position: fixed;
-  z-index: 90;
-  right: var(--page);
-  bottom: max(1rem, env(safe-area-inset-bottom));
-  left: var(--page);
-  display: grid;
-  width: min(86rem, calc(100% - (2 * var(--page))));
-  max-height: calc(100dvh - 2rem);
-  grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.55fr);
-  align-items: end;
-  gap: clamp(1.5rem, 4vw, 5rem);
-  margin: 0 auto;
-  padding: clamp(1.25rem, 2.5vw, 2rem);
-  overflow-y: auto;
-  border: 1px solid var(--ink);
-  border-top: 0.35rem solid var(--accent);
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.privacy-panel[hidden] {
-  display: none;
-}
-
-.privacy-panel-close {
-  position: absolute;
-  top: 0.85rem;
-  right: 1rem;
-  padding: 0.2rem 0;
-  border: 0;
-  border-bottom: 1px solid var(--ink);
-  border-radius: 0;
-  background: transparent;
-  text-transform: uppercase;
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-}
-
-.privacy-panel-close:hover,
-.privacy-panel-close:focus-visible {
-  color: var(--accent);
-  outline: none;
-}
-
-.privacy-panel-copy h2 {
-  margin: 0.45rem 0 0.75rem;
-  font-family: var(--display);
-  font-size: clamp(2rem, 4vw, 4rem);
-  font-weight: 500;
-  line-height: 0.9;
-  letter-spacing: -0.045em;
-}
-
-.privacy-panel-copy > p:not(.section-label) {
-  max-width: 56rem;
-  margin: 0;
-  color: rgba(17, 17, 17, 0.7);
-  font-size: 0.78rem;
-  line-height: 1.55;
-}
-
-.privacy-panel-copy a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
-}
-
-.privacy-panel-copy .privacy-current {
-  margin-top: 0.65rem;
-  color: var(--ink);
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.privacy-panel-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
-}
-
-.privacy-panel-actions button {
-  min-height: 3.25rem;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--ink);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-  text-transform: uppercase;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-}
-
-.privacy-panel-actions button.is-primary {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.privacy-panel-actions button:hover,
-.privacy-panel-actions button:focus-visible {
-  background: var(--ink);
-  color: var(--paper);
-  outline: none;
-}
-
-.privacy-panel-actions button.is-primary:hover,
-.privacy-panel-actions button.is-primary:focus-visible {
-  background: var(--accent);
-  color: var(--paper);
-}
-
 .project-dialog {
   width: min(1120px, calc(100% - 2rem));
   max-height: calc(100svh - 2rem);
@@ -2006,19 +1565,6 @@ img {
 .dialog-visual {
   margin: 0;
   background: #dedad0;
-}
-
-.dialog-visual--instagram {
-  --ig-detail-aspect: 4 / 5;
-  --ig-detail-max-width: 38.4rem;
-  --ig-detail-viewport-width: 57.6svh;
-  --ig-detail-scale: 1;
-  --ig-detail-mobile-scale: var(--ig-detail-scale);
-  --ig-detail-x: 0rem;
-  --ig-detail-mobile-x: var(--ig-detail-x);
-  --ig-detail-y: -3.375rem;
-  --ig-detail-mobile-y: var(--ig-detail-y);
-  padding: clamp(1.5rem, 5vw, 4rem);
 }
 
 .dialog-visual .case-cover {
@@ -2302,46 +1848,6 @@ img {
 .dialog-rights-note a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.2em;
-}
-
-.dialog-visual--instagram .dialog-instagram-action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(100%, var(--ig-detail-max-width), var(--ig-detail-viewport-width));
-  margin: 0 auto;
-  padding: 0.85rem 0 0;
-  border: 0;
-  gap: 1rem;
-}
-
-.dialog-visual--instagram:has(.instagram-gate:not([hidden])) .dialog-instagram-action {
-  display: none;
-}
-
-.dialog-instagram-carousel-controls {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.dialog-instagram-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid currentColor;
-  color: var(--accent);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-}
-
-.dialog-instagram-link:hover,
-.dialog-instagram-link:focus-visible {
-  color: var(--ink);
-  outline: none;
 }
 
 .dialog-copy {
@@ -2734,9 +2240,6 @@ img {
   .project-card .project-image-wrap > .project-image {
     height: auto;
     object-fit: contain;
-  }
-
-  .project-card .project-image-wrap > .instagram-visual {
     aspect-ratio: var(--ig-card-aspect, 4 / 5);
     height: auto;
   }
@@ -2764,46 +2267,19 @@ img {
   .project-card .project-image-wrap > .project-media-collage {
     height: auto;
     aspect-ratio: 4 / 5;
-  }
-
-  .instagram-gate {
     padding: 1.25rem;
-  }
-
-  .instagram-gate-heading {
     padding-left: 2.65rem;
-  }
-
-  .instagram-gate strong {
     font-size: clamp(2.5rem, 12vw, 4.2rem);
-  }
-
-  .instagram-embed-frame--card {
     top: calc(50% + var(--ig-card-mobile-y));
     left: calc(50% + var(--ig-card-mobile-x));
     transform: translate(-50%, -50%) scale(var(--ig-card-mobile-scale));
-  }
-
-  .instagram-embed-frame--dialog {
     top: var(--ig-detail-mobile-y);
     left: calc(50% + var(--ig-detail-mobile-x));
     transform: translateX(-50%) scale(var(--ig-detail-mobile-scale));
-  }
-
-  .dialog-visual--instagram {
     padding: 0.75rem;
-  }
-
-  .instagram-carousel-button {
     width: 2.2rem;
     height: 2.2rem;
-  }
-
-  .dialog-visual--instagram .dialog-instagram-action {
     flex-wrap: wrap;
-  }
-
-  .dialog-instagram-link {
     width: auto;
   }
 
@@ -3026,9 +2502,6 @@ img {
 
   .legal-strip > p:last-child {
     justify-self: start;
-  }
-
-  .privacy-panel {
     right: auto;
     bottom: max(0.75rem, env(safe-area-inset-bottom));
     left: 50%;
@@ -3040,20 +2513,9 @@ img {
     margin: 0;
     padding: 1.2rem;
     transform: translateX(-50%);
-  }
-
-  .privacy-panel-copy h2 {
     font-size: 2rem;
     text-wrap: balance;
-  }
-
-  .privacy-panel-copy,
-  .privacy-panel-actions,
-  .privacy-panel-actions button {
     min-width: 0;
-  }
-
-  .privacy-panel-actions button {
     min-height: 3rem;
     padding: 0.7rem 0.55rem;
     font-size: 0.56rem;
