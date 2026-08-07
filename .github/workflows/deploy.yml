@@ -48,6 +48,11 @@ jobs:
         run: python3 scripts/inject-legal.py _site
 
       - uses: actions/configure-pages@v5
+        # Creates the Pages site on first run, so Pages does not have to be
+        # switched on by hand in repository settings.
+        with:
+          enablement: true
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
