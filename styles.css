@@ -2083,38 +2083,30 @@ img {
 
 .dialog-private-collage {
   position: relative;
-  column-count: 3;
-  column-gap: 2px;
-  column-fill: balance;
-  background: var(--paper);
+  background: #08080c;
+  font-size: 0;
+}
+
+/* Block-level rows, so each row's aspect-ratio sets its height. As flex items
+   they would inherit min-height: auto and be stretched by the images'
+   intrinsic height instead. */
+.dialog-private-collage-row {
+  display: flex;
+  width: 100%;
+  aspect-ratio: var(--row-ratio);
 }
 
 .dialog-private-collage-item {
+  flex: var(--w, 1) 1 0;
   min-width: 0;
   min-height: 0;
-  margin: 0 0 2px;
+  margin: 0;
   overflow: hidden;
   background: #08080c;
-  break-inside: avoid;
-}
-
-.dialog-private-collage-item--sm {
-  aspect-ratio: 4 / 5;
-}
-
-.dialog-private-collage-item--md {
-  aspect-ratio: 3 / 4;
-}
-
-.dialog-private-collage-item--lg {
-  aspect-ratio: 3 / 5;
-}
-
-.dialog-private-collage-item--video {
-  aspect-ratio: 9 / 16;
 }
 
 .dialog-private-collage .project-media-asset {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2807,8 +2799,25 @@ img {
     justify-content: flex-start;
   }
 
+  /* Too narrow for justified rows: flatten them into one uniform 2-up grid so
+     every tile keeps the same ratio and the edges stay flush. */
   .dialog-private-collage {
-    column-count: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dialog-private-collage-row {
+    display: contents;
+  }
+
+  .dialog-private-collage-item {
+    flex: none;
+    aspect-ratio: 3 / 4;
+  }
+
+  .dialog-private-collage-item.is-mobile-wide {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
   }
 
   .project-media-story {

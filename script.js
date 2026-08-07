@@ -366,7 +366,33 @@
     return result;
   };
 
-  const collageSizeCycle = ["md", "sm", "sm", "md", "sm", "sm"];
+  // Every source photo here is 3:4 and every clip 9:16, so a layout driven by
+  // natural ratios renders them all the same size. Instead each row is
+  // justified to the full width, and varying row heights plus per-item width
+  // weights create the size hierarchy.
+  const collageRowPlan = [
+    { weights: [1.7, 1], ratio: "4 / 3" },
+    { weights: [1, 1.3, 1], ratio: "21 / 9" },
+    { weights: [1, 1.55], ratio: "16 / 9" },
+    { weights: [1.35, 1, 1.15], ratio: "2 / 1" },
+  ];
+
+  const collageRows = (items) => {
+    const rows = [];
+    let index = 0;
+
+    while (index < items.length) {
+      const plan = collageRowPlan[rows.length % collageRowPlan.length];
+      const remaining = items.length - index;
+      let count = Math.min(plan.weights.length, remaining);
+      // Absorb a would-be orphan rather than leaving a lone full-width tile.
+      if (remaining - count === 1) count = remaining;
+      rows.push({ plan, items: items.slice(index, index + count) });
+      index += count;
+    }
+
+    return rows;
+  };
 
   const localMediaHero = (project) => {
     const allItems = localProjectMedia(project);
@@ -374,22 +400,29 @@
     const heroItems = declumpVideos(selectedItems.length ? selectedItems : allItems);
     if (!heroItems.length) return "";
 
-    let imageIndex = 0;
+    let itemIndex = 0;
+    // The mobile fallback is a 2-up grid, so an odd count would leave a half
+    // empty final row unless the last tile spans both columns.
+    const lastItem = heroItems.length % 2 === 1 ? heroItems[heroItems.length - 1] : null;
 
     return `<div class="dialog-private-collage" aria-label="Selected event atmosphere">
-      ${heroItems
-        .map((item, index) => {
-          const isVideo = item.type === "video";
-          const size = isVideo ? "lg" : item.size || collageSizeCycle[imageIndex++ % collageSizeCycle.length];
+      ${collageRows(heroItems)
+        .map(
+          ({ plan, items }) => `<div class="dialog-private-collage-row" style="--row-ratio:${plan.ratio}">
+            ${items
+              .map((item, position) => {
+                const isVideo = item.type === "video";
+                const weight = (plan.weights[position] || 1) * (item.size === "lg" ? 1.3 : 1);
+                const eager = itemIndex++ < 4;
 
-          return `<figure class="dialog-private-collage-item dialog-private-collage-item--${item.type} dialog-private-collage-item--${size}">
-            ${localMediaElement(item, {
-              context: "dialog",
-              eager: index < 4,
-              autoplay: isVideo,
-            })}
-          </figure>`;
-        })
+                return `<figure
+                  class="dialog-private-collage-item dialog-private-collage-item--${item.type}${item === lastItem ? " is-mobile-wide" : ""}"
+                  style="--w:${weight.toFixed(3)}"
+                >${localMediaElement(item, { context: "dialog", eager, autoplay: isVideo })}</figure>`;
+              })
+              .join("")}
+          </div>`,
+        )
         .join("")}
     </div>`;
   };
