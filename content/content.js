@@ -64,6 +64,7 @@ const SITE = {
 const PROJECTS = [
   {
     id: "loreal-cannes-2024",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "L’Oréal Paris",
     name: "L’Oréal Paris at the 77th Cannes Film Festival",
     coverTitle: "Cannes 2024",
@@ -133,6 +134,7 @@ const PROJECTS = [
   },
   {
     id: "loreal-revitalift-laser-heidi-klum",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "L’Oréal Paris",
     name: "Revitalift Laser × Heidi Klum",
     coverTitle: "Revitalift Laser",
@@ -256,6 +258,7 @@ const PROJECTS = [
   },
   {
     id: "about-you-fashion-circus-2024",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "ABOUT YOU",
     name: "ABOUT YOU Fashion Circus",
     coverTitle: "Fashion Circus",
@@ -288,6 +291,7 @@ const PROJECTS = [
   },
   {
     id: "about-you-fashionmania-2025",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "ABOUT YOU",
     name: "FASHIONMANIA by ABOUT YOU Fashion Week",
     coverTitle: "Fashionmania",
@@ -313,6 +317,7 @@ const PROJECTS = [
   },
   {
     id: "vip-beauty-fashion-lounge-2025",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "REICHERT+",
     name: "R+ VIP Beauty & Fashion Lounge 2025",
     coverTitle: "VIP Lounge",
@@ -334,6 +339,7 @@ const PROJECTS = [
   },
   {
     id: "gala-girls-camp-2025",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "ONE LUXURY · DOMES Resorts",
     name: "GALA Girls Camp 2025 × ONE LUXURY & DOMES Resorts",
     coverTitle: "GALA Girls Camp",
@@ -362,6 +368,7 @@ const PROJECTS = [
   },
   {
     id: "replay-breuninger-united-to-inspire",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "REPLAY × Breuninger",
     name: "United to Inspire",
     coverTitle: "United to Inspire",
@@ -387,6 +394,7 @@ const PROJECTS = [
   },
   {
     id: "furla-society-berlin-2018",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "Furla",
     name: "The Furla Society — Berlin Dinner & Party",
     coverTitle: "The Furla Society",
@@ -415,6 +423,7 @@ const PROJECTS = [
   },
   {
     id: "furla-bloom-bag-mfw-2022",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "Furla",
     name: "Furla Bloom Bag — Milan Fashion Week",
     coverTitle: "Bloom Bag",
@@ -458,6 +467,7 @@ const PROJECTS = [
   },
   {
     id: "furla-metropolis-remix-2022",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "Furla × She Is The Music",
     name: "Metropolis Remix — Milan Fashion Week",
     coverTitle: "Metropolis Remix",
@@ -501,6 +511,7 @@ const PROJECTS = [
   },
   {
     id: "unica-furla-earth-2023",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "Furla",
     name: "Unica Furla Earth — Milan Fashion Week",
     coverTitle: "Unica Furla Earth",
@@ -648,6 +659,7 @@ const PROJECTS = [
   },
   {
     id: "mac-palina-rojinski-2018",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "M·A·C Cosmetics × Palina Rojinski",
     name: "Limited-Edition Lipstick Launch",
     coverTitle: "Palina × M·A·C",
@@ -676,6 +688,7 @@ const PROJECTS = [
   },
   {
     id: "esprit-future-berlin-2022",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "ESPRIT",
     name: "The Future of ESPRIT Starts Now",
     coverTitle: "Laboratory of Nature",
@@ -701,6 +714,7 @@ const PROJECTS = [
   },
   {
     id: "bulgari-bzero1-berlin-2021",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "BVLGARI",
     name: "B.zero1 Rock Chain — Berlin Launch",
     coverTitle: "B.zero1 Rock Chain",
@@ -726,6 +740,7 @@ const PROJECTS = [
   },
   {
     id: "made-berlin-2022",
+    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "MADE.COM",
     name: "Berlin Showroom & Never Ordinary",
     coverTitle: "Never Ordinary",

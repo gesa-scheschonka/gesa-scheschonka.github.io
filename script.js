@@ -218,9 +218,9 @@
       .join("");
   };
 
-  const sortedProjects = [...projects].sort(
-    (a, b) => Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month),
-  );
+  const sortedProjects = projects
+    .filter((project) => !project.hidden)
+    .sort((a, b) => Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month));
 
   const projectCardLayouts = [
     "full",
