@@ -353,10 +353,14 @@
     const rest = items.filter((item) => item.type !== "video");
     if (!videos.length || !rest.length) return items;
 
+    // Tall video tiles unbalance a masonry layout's trailing columns, so keep
+    // a buffer of shorter images after the last one instead of spreading
+    // videos all the way to the end.
     const result = [...rest];
-    const step = (rest.length + 1) / (videos.length + 1);
+    const usableLength = Math.max(1, result.length - 2);
+    const step = usableLength / (videos.length + 1);
     videos.forEach((video, index) => {
-      const position = Math.min(result.length, Math.round(step * (index + 1)));
+      const position = Math.min(usableLength, Math.round(step * (index + 1)));
       result.splice(position, 0, video);
     });
     return result;

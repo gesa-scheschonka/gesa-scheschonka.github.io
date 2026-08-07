@@ -356,7 +356,7 @@ img {
   grid-auto-flow: row dense;
   align-items: start;
   margin-top: clamp(4rem, 7vw, 7rem);
-  gap: clamp(3.5rem, 7vw, 8rem) clamp(0.75rem, 1.4vw, 1.5rem);
+  gap: clamp(1.75rem, 3vw, 3.5rem) clamp(0.75rem, 1.4vw, 1.5rem);
 }
 
 .project-card {
@@ -402,17 +402,17 @@ img {
   background: #dedad0;
 }
 
-.project-card .project-image {
-  filter: grayscale(0.9) contrast(1.04);
-  transition: transform 800ms cubic-bezier(0.2, 0.7, 0, 1), filter 700ms ease;
-}
-
-.project-card .project-media-asset {
-  filter: grayscale(0.9) contrast(1.04);
-  transition: filter 700ms ease;
-}
-
 @media (hover: hover) and (pointer: fine) {
+  .project-card .project-image {
+    filter: grayscale(0.9) contrast(1.04);
+    transition: transform 800ms cubic-bezier(0.2, 0.7, 0, 1), filter 700ms ease;
+  }
+
+  .project-card .project-media-asset {
+    filter: grayscale(0.9) contrast(1.04);
+    transition: filter 700ms ease;
+  }
+
   .project-card:hover .project-image,
   .project-card:hover .project-media-asset {
     filter: grayscale(0) contrast(1);
@@ -421,8 +421,7 @@ img {
 
 .project-image {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: auto;
   transition: transform 800ms cubic-bezier(0.2, 0.7, 0, 1);
 }
 
@@ -515,7 +514,6 @@ img {
   background: #08080c;
 }
 
-.project-card--full .project-image-wrap > .project-image,
 .project-card--full .project-image-wrap > .case-cover,
 .project-card--full .project-image-wrap > .project-media-reel,
 .project-card--full .project-image-wrap > .project-media-collage {
@@ -523,21 +521,18 @@ img {
   aspect-ratio: auto;
 }
 
-.project-card--landscape .project-image-wrap > .project-image,
 .project-card--landscape .project-image-wrap > .case-cover,
 .project-card--landscape .project-image-wrap > .project-media-reel,
 .project-card--landscape .project-image-wrap > .project-media-collage {
   aspect-ratio: 16 / 10;
 }
 
-.project-card--portrait .project-image-wrap > .project-image,
 .project-card--portrait .project-image-wrap > .case-cover,
 .project-card--portrait .project-image-wrap > .project-media-reel,
 .project-card--portrait .project-image-wrap > .project-media-collage {
   aspect-ratio: 4 / 5;
 }
 
-.project-card--half .project-image-wrap > .project-image,
 .project-card--half .project-image-wrap > .case-cover,
 .project-card--half .project-image-wrap > .project-media-reel,
 .project-card--half .project-image-wrap > .project-media-collage {
@@ -2088,40 +2083,34 @@ img {
 
 .dialog-private-collage {
   position: relative;
-  display: grid;
-  height: auto;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: start;
-  gap: 2px;
+  column-count: 3;
+  column-gap: 2px;
+  column-fill: balance;
   background: var(--paper);
 }
 
 .dialog-private-collage-item {
   min-width: 0;
   min-height: 0;
-  margin: 0;
+  margin: 0 0 2px;
   overflow: hidden;
   background: #08080c;
-  align-self: start;
+  break-inside: avoid;
 }
 
 .dialog-private-collage-item--sm {
-  grid-column: span 3;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
 }
 
 .dialog-private-collage-item--md {
-  grid-column: span 4;
   aspect-ratio: 3 / 4;
 }
 
 .dialog-private-collage-item--lg {
-  grid-column: span 6;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 5;
 }
 
-.dialog-private-collage-item--video.dialog-private-collage-item--lg {
-  grid-column: span 4;
+.dialog-private-collage-item--video {
   aspect-ratio: 9 / 16;
 }
 
@@ -2752,7 +2741,6 @@ img {
     height: 2.4rem;
   }
 
-  .project-card--full .project-image-wrap > .project-image,
   .project-card--full .project-image-wrap > .case-cover,
   .project-card--full .project-image-wrap > .project-media-reel,
   .project-card--full .project-image-wrap > .project-media-collage {
@@ -2820,16 +2808,7 @@ img {
   }
 
   .dialog-private-collage {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .dialog-private-collage-item--sm,
-  .dialog-private-collage-item--md {
-    grid-column: span 2;
-  }
-
-  .dialog-private-collage-item--lg {
-    grid-column: 1 / -1;
+    column-count: 2;
   }
 
   .project-media-story {
