@@ -100,7 +100,7 @@
     const y = safeCropNumber(crop.y, 0, -10, 10);
     const mobileY = safeCropNumber(crop.mobileY, y, -10, 10);
 
-    return ` style="aspect-ratio:${aspectWidth} / ${aspectHeight};--ig-card-media-height:${mediaHeight.toFixed(3)}cqw;--ig-card-scale:${scale};--ig-card-mobile-scale:${mobileScale};--ig-card-x:${x}rem;--ig-card-mobile-x:${mobileX}rem;--ig-card-y:${y}rem;--ig-card-mobile-y:${mobileY}rem"`;
+    return ` style="--ig-card-aspect:${aspectWidth} / ${aspectHeight};--ig-card-media-height:${mediaHeight.toFixed(3)}cqw;--ig-card-scale:${scale};--ig-card-mobile-scale:${mobileScale};--ig-card-x:${x}rem;--ig-card-mobile-x:${mobileX}rem;--ig-card-y:${y}rem;--ig-card-mobile-y:${mobileY}rem"`;
   };
 
   const instagramDialogStyle = (project) => {
@@ -222,36 +222,48 @@
     .filter((project) => !project.hidden)
     .sort((a, b) => Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month));
 
-  const projectCardLayouts = [
-    "full",
-    "landscape",
-    "portrait",
-    "half",
-    "portrait",
-    "landscape",
-    "half",
-    "portrait",
-    "full",
-    "half",
-    "landscape",
-    "portrait",
-    "half",
-    "portrait",
-    "landscape",
-    "full",
-    "portrait",
-    "half",
-    "landscape",
-    "portrait",
-    "half",
+  // The overview is laid out as justified rows: the first project runs full
+  // width at its own aspect ratio, and every following row is filled edge to
+  // edge. Each row cycles through this plan, so any number of projects — now
+  // or later — slots in without leaving a short, ragged row.
+  const projectRowPlan = [
+    { weights: [1.55, 1], ratio: 16 / 9 },
+    { weights: [1, 1.35, 1], ratio: 21 / 9 },
+    { weights: [1, 1.7], ratio: 2 / 1 },
+    { weights: [1.3, 1, 1.15], ratio: 21 / 9 },
   ];
 
-  const projectCardLayout = (project, index) => {
-    const requestedLayout = String(project.cardLayout || "").toLowerCase();
-    if (["full", "landscape", "portrait", "half"].includes(requestedLayout)) {
-      return requestedLayout;
+  const projectRows = (items) => {
+    if (!items.length) return [];
+
+    const rows = [{ hero: true, items: [items[0]] }];
+    let index = 1;
+
+    while (index < items.length) {
+      const plan = projectRowPlan[(rows.length - 1) % projectRowPlan.length];
+      const remaining = items.length - index;
+      let count = Math.min(plan.weights.length, remaining);
+      // Absorb a lone trailing project instead of leaving it stranded.
+      if (remaining - count === 1) count = remaining;
+
+      const weights = items
+        .slice(index, index + count)
+        .map((item, position) => plan.weights[position] || 1);
+      const total = weights.reduce((sum, weight) => sum + weight, 0);
+      // Widening the row keeps tiles from growing too tall when it holds more
+      // projects than the plan expected.
+      const ratio = plan.ratio * (count / plan.weights.length);
+
+      rows.push({
+        items: items.slice(index, index + count),
+        // Each tile's aspect ratio is its share of the row width over the
+        // shared row height, so every image in the row lines up exactly.
+        cards: weights.map((weight) => ({ weight, aspect: (weight / total) * ratio })),
+      });
+      index += count;
     }
-    return projectCardLayouts[index % projectCardLayouts.length] || "half";
+
+    return rows;
   };
 
   const projectType = (project) => project.category || "Portfolio case";
@@ -896,8 +908,11 @@
     }
   };
 
-  const projectCard = (project, index) => `
-    <article class="project-card project-card--${projectCardLayout(project, index)} reveal">
+  const projectCard = (project, index, card) => `
+    <article
+      class="project-card${card ? "" : " project-card--hero"} reveal"
+      ${card ? `style="--w:${card.weight};--card-aspect:${card.aspect.toFixed(4)}"` : ""}
+    >
       <button
         class="project-open"
         type="button"
@@ -930,7 +945,18 @@
 
   const renderProjects = () => {
     projectCount.textContent = String(sortedProjects.length).padStart(2, "0");
-    projectList.innerHTML = sortedProjects.map(projectCard).join("");
+
+    let index = 0;
+    projectList.innerHTML = projectRows(sortedProjects)
+      .map(
+        (row) => `<div class="project-row${row.hero ? " project-row--hero" : ""}">
+          ${row.items
+            .map((project, position) => projectCard(project, index++, row.cards?.[position]))
+            .join("")}
+        </div>`,
+      )
+      .join("");
+
     observeReveals();
     setupProjectMediaReels(projectList);
     hydrateInstagramEmbeds(projectList);
