@@ -2,5 +2,6 @@
 Thumbs.db
 *.log
 .venv/
+.claude/
 playwright-report/
 .playwright-artifacts/
