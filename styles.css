@@ -398,6 +398,14 @@ img {
 
 /* Only the visual fills the wrapper — the credit pill is also a child here and
    must keep its own size. */
+.project-card .project-image-wrap > .project-image,
+.project-card .project-image-wrap > .case-cover,
+.project-card .project-image-wrap > .project-media-reel,
+.project-card .project-image-wrap > .project-media-collage {
+  width: 100%;
+  height: 100%;
+}
+
 .project-card .project-image-wrap > .project-image {
   object-fit: cover;
 }
@@ -552,6 +560,14 @@ img {
 
 /* The row sets each tile's height, so generated covers and media edits just
    fill their wrapper instead of carrying a ratio of their own. */
+/* The row sets each tile's height, so generated covers and media edits just
+   fill their wrapper instead of carrying a ratio of their own. */
+.project-card .project-image-wrap > .case-cover,
+.project-card .project-image-wrap > .project-media-reel,
+.project-card .project-image-wrap > .project-media-collage {
+  aspect-ratio: auto;
+}
+
 .project-card--hero .project-image-wrap > .case-cover,
 .project-card--hero .project-image-wrap > .project-media-reel,
 .project-card--hero .project-image-wrap > .project-media-collage {
@@ -1451,6 +1467,11 @@ img {
 
 .legal-strip > p {
   margin: 0;
+}
+
+.legal-strip a {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--ink);
 }
 
 .legal-strip > p:last-child {
