@@ -59,7 +59,8 @@ imageCredit: "Fotograf:in / Rechteinhaber",
 imageSource: "https://…",      // bei "editorial" verpflichtend
 ```
 
-Der Rechtestand jedes Bildes ist in `PROJECT_IMAGE_RIGHTS.md` dokumentiert.
+Die Angaben aus `imageCredit`, `imageSource` und `rightsNote` werden in der
+Detailansicht mit ausgegeben – sie sind der auf der Seite sichtbare Rechtenachweis.
 
 ### Clients und Lebenslauf
 
@@ -151,8 +152,7 @@ von Drittanbietern geladen.
 ├── impressum.html
 ├── datenschutz.html
 ├── styles.css
-├── script.js
-└── PROJECT_IMAGE_RIGHTS.md # Bildrecherche und Freigabe-Checkliste
+└── script.js
 ```
 
 ## Hinweise
