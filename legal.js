@@ -22,10 +22,14 @@
     });
   });
 
-  document.querySelectorAll("[data-legal-email]").forEach((element) => {
-    element.href = `mailto:${site.email}`;
-    element.textContent = site.email;
-  });
+  // Only used for local preview. In the deployed site the address is already
+  // baked into the markup, so there is nothing to fill in here.
+  if (site.email) {
+    document.querySelectorAll("[data-legal-email]").forEach((element) => {
+      element.href = `mailto:${site.email}`;
+      element.textContent = site.email;
+    });
+  }
 
   document.querySelectorAll("[data-optional-legal]").forEach((element) => {
     const key = element.dataset.optionalLegal;

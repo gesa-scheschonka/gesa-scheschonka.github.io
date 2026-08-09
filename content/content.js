@@ -32,7 +32,8 @@ const SITE = {
   firstName: "Gesa",
   lastName: "Scheschonka",
   initials: "GS",
-  email: "hello@example.com",
+  // The email is not stored here: it is written into the HTML at deploy time
+  // as HTML character references, so it never appears in plain text.
   location: "Berlin",
   heroTitle: "I shape how brands show up in culture",
   heroIntro:

@@ -2027,6 +2027,21 @@ img {
   content: ".";
 }
 
+/* Language-precedence note under the English legal headings. */
+.legal-lang-note {
+  max-width: 46rem;
+  margin: 1.25rem 0 0;
+  color: rgba(17, 17, 17, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.legal-lang-note a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
 .legal-layout {
   display: grid;
   grid-template-columns: 1fr 3fr;

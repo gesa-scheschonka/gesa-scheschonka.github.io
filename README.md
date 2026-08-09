@@ -76,8 +76,16 @@ Download-Link erscheint dann automatisch.
 ## Persönliche Daten
 
 Adresse und E-Mail stehen **nicht** im Repository. Sie liegen als
-GitHub Secrets und werden beim Deploy in die Seite geschrieben
+GitHub Secrets und werden beim Deploy direkt in die HTML-Dateien geschrieben
 (`scripts/inject-legal.py`). Im Repository stehen nur Platzhalter.
+
+Die Werte landen bewusst im Markup und nicht erst per JavaScript: § 5 DDG
+verlangt, dass das Impressum „ständig verfügbar" ist – mit deaktiviertem
+JavaScript stünden sonst nur Platzhalter dort. Die E-Mail-Adresse wird dabei als
+HTML-Zeichenreferenzen (`&#103;&#101;…`) eingesetzt. Sie wird normal angezeigt,
+bleibt klickbar und funktioniert ohne JavaScript, taucht aber nirgends im
+Quelltext als Klartext auf – das stoppt einfache Adress-Sammler. Der Build
+bricht ab, falls die Adresse doch im Klartext landet.
 
 Das hält die Daten aus dem Quellcode und der Git-Historie heraus – auf der
 veröffentlichten Seite sind sie weiterhin sichtbar, wie es § 5 DDG für das
@@ -109,7 +117,11 @@ und **Commit changes** zu klicken.
 
 ## Impressum und Datenschutz
 
-`impressum.html` und `datenschutz.html` sind im Footer verlinkt. Die Texte sind
+Maßgeblich sind `impressum-de.html` und `datenschutz-de.html`; ein
+deutschsprachiges Impressum ist für ein deutsches Unternehmen Pflicht, auch wenn
+die Website englisch ist. `impressum.html` und `datenschutz.html` sind die
+englischen Übersetzungen und verweisen auf die deutsche Fassung. Alle vier sind
+im Footer verlinkt. Die Texte sind
 auf die aktuelle Variante zugeschnitten: keine Analytics, keine Cookies, keine
 Formulare, keine externen Schriften und keine eingebetteten Inhalte Dritter.
 
