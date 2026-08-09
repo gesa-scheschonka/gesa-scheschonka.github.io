@@ -2276,8 +2276,6 @@ img {
   .project-card .project-image-wrap > .project-image {
     height: auto;
     object-fit: contain;
-    aspect-ratio: var(--ig-card-aspect, 4 / 5);
-    height: auto;
   }
 
   .dialog-toolbar {
@@ -2303,20 +2301,6 @@ img {
   .project-card .project-image-wrap > .project-media-collage {
     height: auto;
     aspect-ratio: 4 / 5;
-    padding: 1.25rem;
-    padding-left: 2.65rem;
-    font-size: clamp(2.5rem, 12vw, 4.2rem);
-    top: calc(50% + var(--ig-card-mobile-y));
-    left: calc(50% + var(--ig-card-mobile-x));
-    transform: translate(-50%, -50%) scale(var(--ig-card-mobile-scale));
-    top: var(--ig-detail-mobile-y);
-    left: calc(50% + var(--ig-detail-mobile-x));
-    transform: translateX(-50%) scale(var(--ig-detail-mobile-scale));
-    padding: 0.75rem;
-    width: 2.2rem;
-    height: 2.2rem;
-    flex-wrap: wrap;
-    width: auto;
   }
 
   .case-cover strong {
@@ -2538,25 +2522,6 @@ img {
 
   .legal-strip > p:last-child {
     justify-self: start;
-    right: auto;
-    bottom: max(0.75rem, env(safe-area-inset-bottom));
-    left: 50%;
-    width: calc(100% - 1.5rem);
-    max-width: none;
-    max-height: calc(100dvh - 1.5rem);
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    margin: 0;
-    padding: 1.2rem;
-    transform: translateX(-50%);
-    font-size: 2rem;
-    text-wrap: balance;
-    min-width: 0;
-    min-height: 3rem;
-    padding: 0.7rem 0.55rem;
-    font-size: 0.56rem;
-    line-height: 1.25;
-    white-space: normal;
   }
 
   .site-footer > div {
