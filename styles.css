@@ -2027,10 +2027,43 @@ img {
   content: ".";
 }
 
-/* Language-precedence note under the English legal headings. */
+.legal-language-switch {
+  display: inline-flex;
+  align-items: stretch;
+  justify-self: start;
+  margin-top: 1.5rem;
+  border: 1px solid var(--accent);
+}
+
+.legal-language-switch a {
+  min-width: 6.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--accent);
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.legal-language-switch a + a {
+  border-left: 1px solid var(--accent);
+}
+
+.legal-language-switch a[aria-current="page"],
+.legal-language-switch a:hover,
+.legal-language-switch a:focus-visible {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* Language-precedence note shared by both legal-page languages. */
 .legal-lang-note {
   max-width: 46rem;
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   color: rgba(17, 17, 17, 0.6);
   font-size: 0.8rem;
   line-height: 1.5;
@@ -2545,6 +2578,10 @@ img {
   .legal-title h1 {
     margin-top: 2rem;
     font-size: clamp(4rem, 20vw, 7rem);
+  }
+
+  .legal-language-switch {
+    margin-top: 2rem;
   }
 }
 
