@@ -75,7 +75,7 @@ Download-Link erscheint dann automatisch.
 
 ## Persönliche Daten
 
-Adresse, Telefonnummer und E-Mail stehen **nicht** im Repository. Sie liegen als
+Adresse und E-Mail stehen **nicht** im Repository. Sie liegen als
 GitHub Secrets und werden beim Deploy in die Seite geschrieben
 (`scripts/inject-legal.py`). Im Repository stehen nur Platzhalter.
 
@@ -90,7 +90,6 @@ Secrets unter **Settings → Secrets and variables → Actions**:
 | `SITE_EMAIL` | Kontakt-E-Mail |
 | `LEGAL_STREET` | Straße und Hausnummer |
 | `LEGAL_POSTAL_CITY` | PLZ und Ort |
-| `LEGAL_PHONE` | Telefonnummer |
 | `LEGAL_VAT_ID` | USt-IdNr. (optional) |
 | `LEGAL_FULL_NAME` | Name im Impressum (optional) |
 | `LEGAL_EDITORIAL_RESPONSIBLE` | Verantwortlich nach § 18 MStV (optional) |

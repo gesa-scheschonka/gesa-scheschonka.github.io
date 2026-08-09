@@ -20,7 +20,6 @@ FIELDS = {
     "SITE_EMAIL": ("email", False),
     "LEGAL_STREET": ("street", True),
     "LEGAL_POSTAL_CITY": ("postalCity", True),
-    "LEGAL_PHONE": ("phone", True),
     "LEGAL_VAT_ID": ("vatId", True),
     "LEGAL_FULL_NAME": ("fullName", True),
     "LEGAL_EDITORIAL_RESPONSIBLE": ("editorialResponsible", True),

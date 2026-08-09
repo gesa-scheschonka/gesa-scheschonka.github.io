@@ -41,7 +41,6 @@ jobs:
           SITE_EMAIL: ${{ secrets.SITE_EMAIL }}
           LEGAL_STREET: ${{ secrets.LEGAL_STREET }}
           LEGAL_POSTAL_CITY: ${{ secrets.LEGAL_POSTAL_CITY }}
-          LEGAL_PHONE: ${{ secrets.LEGAL_PHONE }}
           LEGAL_VAT_ID: ${{ secrets.LEGAL_VAT_ID }}
           LEGAL_FULL_NAME: ${{ secrets.LEGAL_FULL_NAME }}
           LEGAL_EDITORIAL_RESPONSIBLE: ${{ secrets.LEGAL_EDITORIAL_RESPONSIBLE }}

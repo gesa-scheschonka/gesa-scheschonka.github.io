@@ -52,7 +52,7 @@ const SITE = {
     fullName: "Gesa Scheschonka",
     street: "[Enter street and house number]",
     postalCity: "[Enter postcode and city]",
-    phone: "[Enter telephone number]",
+    country: "Deutschland",
     vatId: "",
     editorialResponsible: "Gesa Scheschonka",
   },
