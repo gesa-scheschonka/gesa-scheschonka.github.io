@@ -42,8 +42,7 @@ Dessen Aussehen steuern `coverTheme` und `coverVariant`.
 ### Projekte vorübergehend ausblenden
 
 `hidden: true` in einem Projektblock nimmt ihn aus Übersicht, Zähler und
-Detail-Navigation, lässt die Daten aber vollständig erhalten. Aktuell sind so
-15 Projekte geparkt, bis freigegebene Bilder vorliegen. Zum Reaktivieren
+Detail-Navigation, lässt die Daten aber vollständig erhalten. Zum Reaktivieren
 einfach die Zeile `hidden: true` entfernen.
 
 ### Freigegebenes Projektfoto einsetzen
@@ -61,6 +60,37 @@ imageSource: "https://…",      // bei "editorial" verpflichtend
 
 Die Angaben aus `imageCredit`, `imageSource` und `rightsNote` werden in der
 Detailansicht mit ausgegeben – sie sind der auf der Seite sichtbare Rechtenachweis.
+
+### Eigene Foto- und Video-Serien
+
+Mehrere freigegebene Fotos und Videos werden über `media` eingebunden. Das
+erste Element ist das große Leitmotiv in der Übersicht; deshalb dort immer das
+Titelbild eintragen. Die ersten sechs Elemente bilden außerdem die bewegte
+Dreier-Collage der Projektkarte. In der Detailansicht erscheinen alle Einträge
+als Collage am Seitenanfang.
+
+```js
+mediaAutoplay: 1500,
+media: [
+  {
+    type: "image",
+    src: "assets/images/project-media/mein-projekt/cover.jpg",
+    alt: "Kurze Bildbeschreibung",
+    hero: true,
+    size: "lg",
+  },
+  {
+    type: "video",
+    src: "assets/videos/project-media/mein-projekt/video-01.mp4",
+    poster: "assets/images/project-media/mein-projekt/video-01-poster.jpg",
+    alt: "Kurze Beschreibung des Videos",
+    hero: true,
+  },
+],
+```
+
+Videos müssen als webtaugliche MP4-Dateien vorliegen; ein lokales Posterbild
+verhindert leere Flächen, bevor das Video in den sichtbaren Bereich kommt.
 
 ### Clients und Lebenslauf
 

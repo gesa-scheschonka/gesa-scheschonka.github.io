@@ -259,7 +259,6 @@ const PROJECTS = [
   },
   {
     id: "about-you-fashion-circus-2024",
-    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "ABOUT YOU",
     name: "ABOUT YOU Fashion Circus",
     coverTitle: "Fashion Circus",
@@ -274,19 +273,119 @@ const PROJECTS = [
     coverTheme: "fashion",
     coverVariant: 2,
     imageAlt: "Original graphic portfolio cover for ABOUT YOU Fashion Circus",
-    instagram: {
-      url: "https://www.instagram.com/p/C9CwvSRtYBb/",
-      account: "@armin.danesh",
-      label: "Event post",
-      detailAspect: [4, 5],
-      nativeCarousel: true,
-    },
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/about-you-fashion-circus/cover.jpg",
+        alt: "Illuminated Circus Roncalli tent at the ABOUT YOU Fashion Circus",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/about-you-fashion-circus/video-01.mp4",
+        poster: "assets/images/project-media/about-you-fashion-circus/video-01-poster.jpg",
+        alt: "Arrival atmosphere at the ABOUT YOU Fashion Circus",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/about-you-fashion-circus/video-02.mp4",
+        poster: "assets/images/project-media/about-you-fashion-circus/video-02-poster.jpg",
+        alt: "Fashion and circus performance inside the big top",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/about-you-fashion-circus/image-01.jpg",
+        alt: "Aerial acrobat performing inside a transparent sphere",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/about-you-fashion-circus/video-03.mp4",
+        poster: "assets/images/project-media/about-you-fashion-circus/video-03-poster.jpg",
+        alt: "Runway moment during ABOUT YOU Fashion Circus",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/about-you-fashion-circus/image-02.jpg",
+        alt: "Guests entering the illuminated Circus Roncalli venue",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/about-you-fashion-circus/video-04.mp4",
+        poster: "assets/images/project-media/about-you-fashion-circus/video-04-poster.jpg",
+        alt: "Finale atmosphere at the ABOUT YOU Fashion Circus",
+        hero: true,
+      },
+    ],
     services: ["Media Relations", "Guest Management", "Red Carpet", "On-site Support"],
     sources: [
       { label: "REICHERT+ case study", url: "https://reichertplus.com/en/case-fashion-circus-2024/" },
       {
         label: "Official ABOUT YOU release",
         url: "https://corporate.aboutyou.de/app/uploads/2024/06/24-06-05_ABOUT-YOU-FASHION-WEEK-2024-DIE-EINZIGARTIGE-PARTNERSCHAFT-MIT-CIRCUS-RONCALLI-DEFINIERT-DAS-FASHIONTAINMENT-IM-RAHMEN-DES-ABOUT-YOU-FASHION-CIRCUS-NEU.pdf",
+      },
+    ],
+  },
+  {
+    id: "ewa-herzog-wrapped-in-silence-2024",
+    client: "EWA HERZOG",
+    name: "Wrapped in Silence — Spring/Summer 2025",
+    coverTitle: "Wrapped in Silence",
+    category: "Fashion Communications",
+    summary:
+      "PR, guest and on-site support for Ewa Herzog’s Berlin Fashion Week comeback at KÖNIG GALERIE.",
+    description:
+      "After a five-year show break, Ewa Herzog presented the Spring/Summer 2025 collection Wrapped in Silence at KÖNIG GALERIE. The Berlin Fashion Week show brought 21 models to a 30-metre runway inside the gallery’s monumental nave.",
+    year: 2024,
+    month: 7,
+    location: "Berlin",
+    coverTheme: "silver",
+    coverVariant: 5,
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/ewa-herzog-wrapped-in-silence/cover.jpg",
+        alt: "Ewa Herzog guest gifts aligned along the runway at KÖNIG GALERIE",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/ewa-herzog-wrapped-in-silence/video-01.mp4",
+        poster: "assets/images/project-media/ewa-herzog-wrapped-in-silence/video-01-poster.jpg",
+        alt: "Ewa Herzog branding at the head of the KÖNIG GALERIE runway",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/ewa-herzog-wrapped-in-silence/video-02.mp4",
+        poster: "assets/images/project-media/ewa-herzog-wrapped-in-silence/video-02-poster.jpg",
+        alt: "Models walking the Ewa Herzog Spring Summer 2025 finale",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ewa-herzog-wrapped-in-silence/image-01.jpg",
+        alt: "Backstage rails with looks prepared for the Ewa Herzog show",
+        hero: true,
+      },
+    ],
+    services: ["PR & Media Relations", "Concept Support", "Guest Management", "VIP & Red Carpet"],
+    sources: [
+      {
+        label: "REICHERT+ case study",
+        url: "https://reichertplus.com/en/grosses-comeback-ewa-herzog-feiert-glanzvolle-fashion-show-in-der-koenig-galerie/",
+      },
+      {
+        label: "Berlin Fashion Week brand profile",
+        url: "https://fashionweek.berlin/en/brands/ewa-herzog-1.html",
       },
     ],
   },
@@ -369,7 +468,6 @@ const PROJECTS = [
   },
   {
     id: "replay-breuninger-united-to-inspire",
-    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "REPLAY × Breuninger",
     name: "United to Inspire",
     coverTitle: "United to Inspire",
@@ -384,6 +482,43 @@ const PROJECTS = [
     coverTheme: "denim",
     coverVariant: 3,
     imageAlt: "Original graphic portfolio cover for REPLAY and Breuninger United to Inspire",
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/replay-breuninger/cover.jpg",
+        alt: "REPLAY and Breuninger United to Inspire multi-screen installation",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/replay-breuninger/video-01.mp4",
+        poster: "assets/images/project-media/replay-breuninger/video-01-poster.jpg",
+        alt: "Moving-image installation at the United to Inspire launch",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/replay-breuninger/video-02.mp4",
+        poster: "assets/images/project-media/replay-breuninger/video-02-poster.jpg",
+        alt: "Performance atmosphere during the REPLAY and Breuninger event",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/replay-breuninger/image-01.jpg",
+        alt: "United to Inspire event environment in warm red light",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/replay-breuninger/video-03.mp4",
+        poster: "assets/images/project-media/replay-breuninger/video-03-poster.jpg",
+        alt: "Guests and performance at the United to Inspire launch",
+        hero: true,
+      },
+    ],
     services: ["Launch Communications", "Event PR", "Guest Relations", "Media Relations"],
     sources: [
       { label: "Production case", url: "https://bigcountry.berlin/project/replay-x-breuninger/" },
@@ -660,7 +795,6 @@ const PROJECTS = [
   },
   {
     id: "mac-palina-rojinski-2018",
-    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "M·A·C Cosmetics × Palina Rojinski",
     name: "Limited-Edition Lipstick Launch",
     coverTitle: "Palina × M·A·C",
@@ -675,6 +809,53 @@ const PROJECTS = [
     coverTheme: "red",
     coverVariant: 3,
     imageAlt: "Original graphic portfolio cover for the M·A·C Cosmetics and Palina Rojinski lipstick launch",
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/cover.jpg",
+        alt: "Illuminated M·A·C installation featuring Palina Rojinski",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/mac-palina/video-01.mp4",
+        poster: "assets/images/project-media/mac-palina/video-01-poster.jpg",
+        alt: "Cocktail party atmosphere at the Palina Rojinski lipstick launch",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/image-01.jpg",
+        alt: "Palina Rojinski and guests at the M·A·C launch event",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/image-02.jpg",
+        alt: "Portrait installation for the limited-edition M·A·C lipstick",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/image-03.jpg",
+        alt: "Event guests in front of the M·A·C and Palina Rojinski backdrop",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/image-04.jpg",
+        alt: "Close-up of the graphic event installation",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/mac-palina/image-05.jpg",
+        alt: "M·A·C launch setting with red graphic accents",
+        hero: true,
+      },
+    ],
     services: ["Launch Communications", "Event PR", "Guest Relations", "Media Relations"],
     sources: [
       {
@@ -715,7 +896,6 @@ const PROJECTS = [
   },
   {
     id: "bulgari-bzero1-berlin-2021",
-    hidden: true, // awaiting confirmed photography — kept in data, not shown
     client: "BVLGARI",
     name: "B.zero1 Rock Chain — Berlin Launch",
     coverTitle: "B.zero1 Rock Chain",
@@ -730,6 +910,64 @@ const PROJECTS = [
     coverTheme: "gold",
     coverVariant: 2,
     imageAlt: "Original graphic portfolio cover for the BVLGARI B.zero1 Rock Chain launch in Berlin",
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/bulgari-bzero1/cover.jpg",
+        alt: "Oversized BVLGARI B.zero1 ring installation at the Berlin launch",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-01.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-01-poster.jpg",
+        alt: "B.zero1 launch installation in motion",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-02.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-02-poster.jpg",
+        alt: "Guests inside the BVLGARI launch environment",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/bulgari-bzero1/image-01.jpg",
+        alt: "BVLGARI B.zero1 event installation viewed across the venue",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-03.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-03-poster.jpg",
+        alt: "UFO361 performing at the BVLGARI Berlin launch",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-04.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-04-poster.jpg",
+        alt: "Live performance and light design at the B.zero1 event",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-05.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-05-poster.jpg",
+        alt: "Crowd atmosphere during the BVLGARI cocktail event",
+        hero: true,
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/bulgari-bzero1/video-06.mp4",
+        poster: "assets/images/project-media/bulgari-bzero1/video-06-poster.jpg",
+        alt: "Late-night moment from the BVLGARI B.zero1 launch",
+        hero: true,
+      },
+    ],
     services: ["Launch Communications", "Event PR", "Talent Relations", "Guest Relations"],
     sources: [
       {
@@ -769,6 +1007,91 @@ const PROJECTS = [
     ],
   },
   {
+    id: "ritz-carlton-golden-gala-2019",
+    client: "The Ritz-Carlton, Berlin",
+    name: "The Golden Gala — Grand Re-Opening",
+    coverTitle: "The Golden Gala",
+    category: "Event Communications",
+    summary:
+      "The grand reopening celebration for The Ritz-Carlton, Berlin after its extensive Art Deco-inspired refurbishment.",
+    description:
+      "The Golden Gala marked the reopening of The Ritz-Carlton, Berlin following an extensive refurbishment. Live music, choreography and Art Deco-inspired staging transformed the hotel into a theatrical celebration of its renewed spaces.",
+    year: 2019,
+    month: 3,
+    location: "Berlin",
+    coverTheme: "gold",
+    coverVariant: 5,
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/cover.jpg",
+        alt: "Theatrical staircase performance at The Ritz-Carlton Berlin Golden Gala",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-01.jpg",
+        alt: "Golden Gala performance inside The Ritz-Carlton Berlin",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-02.jpg",
+        alt: "Art Deco-inspired Golden Gala event setting",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-03.jpg",
+        alt: "Guests and live entertainment at The Ritz-Carlton reopening",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-04.jpg",
+        alt: "Golden performance tableau during the grand reopening",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-05.jpg",
+        alt: "The Ritz-Carlton Berlin lobby staged for The Golden Gala",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-06.jpg",
+        alt: "Live musicians performing at The Golden Gala",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-07.jpg",
+        alt: "Art Deco costume and choreography at the reopening celebration",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/ritz-carlton-reopening/image-08.jpg",
+        alt: "Evening atmosphere inside The Ritz-Carlton Berlin",
+        hero: true,
+      },
+    ],
+    services: ["Event Communications", "Guest Relations", "Media Relations", "On-site Support"],
+    sources: [
+      {
+        label: "Golden Gala production case",
+        url: "https://www.freundevonfreunden.com/work/ritz-carlton-berlins-golden-gala-2019/",
+      },
+      {
+        label: "Hotel refurbishment announcement",
+        url: "https://www.hospitalitynet.org/announcement/41002566.html",
+      },
+    ],
+  },
+  {
     id: "genius-immersive-pre-opening",
     client: "Borealis Interactive Group",
     name: "GENIUS — Immersive Experience Pre-Opening",
@@ -783,24 +1106,68 @@ const PROJECTS = [
     location: "Berlin",
     coverTheme: "night",
     coverVariant: 6,
-    image: "assets/images/genius-immersive-cc-by-sa.jpg",
-    imageRights: "licensed",
-    imageCredit: "Photo: Lear 21 · CC BY-SA 4.0 · responsive crop in overview",
-    imageSource: "https://commons.wikimedia.org/wiki/File:Immersive_art_in_Berlin.jpg",
-    imageLicenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    imageLicenseLabel: "CC BY-SA 4.0 licence",
-    imageUsage:
-      "Reusable under CC BY-SA 4.0 with attribution, a licence link and an indication of modifications.",
-    imagePosition: "50% 50%",
-    imageAlt:
-      "Visitors inside the GENIUS immersive experience in Berlin with a large-scale projection of Leonardo da Vinci’s Last Supper",
+    mediaAutoplay: 1500,
+    media: [
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/cover.jpg",
+        alt: "Colourful floor-to-wall projection inside the GENIUS immersive experience",
+        hero: true,
+        size: "lg",
+      },
+      {
+        type: "video",
+        src: "assets/videos/project-media/genius-immersive/video-01.mp4",
+        poster: "assets/images/project-media/genius-immersive/video-01-poster.jpg",
+        alt: "Large-scale projections moving through the GENIUS exhibition",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-01.jpg",
+        alt: "Visitors surrounded by Leonardo da Vinci-inspired projections",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-02.jpg",
+        alt: "Immersive projection environment during the pre-opening",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-03.jpg",
+        alt: "Projected artwork spanning the exhibition walls and floor",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-04.jpg",
+        alt: "Interactive GENIUS installation with luminous colour and geometry",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-05.jpg",
+        alt: "Guest perspective inside the GENIUS 360-degree visual environment",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-06.jpg",
+        alt: "Atmospheric projection detail from the GENIUS experience",
+        hero: true,
+      },
+      {
+        type: "image",
+        src: "assets/images/project-media/genius-immersive/image-07.jpg",
+        alt: "Pre-opening guests exploring the immersive exhibition",
+        hero: true,
+      },
+    ],
     services: ["Culture Communications", "Pre-opening", "Media Relations", "Guest Relations"],
     sources: [
       { label: "Official producer announcement", url: "https://www.presseportal.de/pm/160718/5101201" },
-      {
-        label: "Licensed photograph and attribution details",
-        url: "https://commons.wikimedia.org/wiki/File:Immersive_art_in_Berlin.jpg",
-      },
       { label: "flora&faunavisions case study", url: "https://www.florafaunavisions.de/projects/3763/" },
       {
         label: "Technical production report",

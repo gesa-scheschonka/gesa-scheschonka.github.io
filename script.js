@@ -151,16 +151,17 @@
     const alt = escapeHTML(item.alt || "Event atmosphere");
 
     if (item.type === "video") {
+      const deferSource = context === "card";
       return `<video
         class="project-media-asset project-media-video"
         muted
         loop
         playsinline
-        preload="metadata"
+        preload="${deferSource ? "none" : "metadata"}"
         ${autoplay ? "autoplay" : ""}
         ${item.poster ? `poster="${escapeHTML(item.poster)}"` : ""}
         aria-label="${alt}"
-      ><source src="${escapeHTML(item.src)}" type="video/mp4" /></video>`;
+      ><source ${deferSource ? "data-src" : "src"}="${escapeHTML(item.src)}" type="video/mp4" /></video>`;
     }
 
     return `<img
@@ -342,6 +343,14 @@
   const projectMediaReelTimers = new Map();
   let projectMediaReelObserver;
 
+  const loadProjectVideo = (video) => {
+    const source = video?.querySelector("source[data-src]");
+    if (!source) return;
+    source.src = source.dataset.src;
+    source.removeAttribute("data-src");
+    video.load();
+  };
+
   const stopProjectMediaReel = (reel) => {
     const timer = projectMediaReelTimers.get(reel);
     if (timer) window.clearInterval(timer);
@@ -367,6 +376,7 @@
         video.pause();
         return;
       }
+      loadProjectVideo(video);
       video.currentTime = 0;
       video.play().catch(() => {});
     });
