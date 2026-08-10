@@ -1156,8 +1156,7 @@ img {
   height: 120%;
   object-fit: contain;
   object-position: center bottom;
-  /* Only the portrait is desaturated; the blue field behind it stays. */
-  filter: grayscale(1) contrast(0.92);
+  filter: contrast(0.88);
 }
 
 .portrait-light {
@@ -2152,8 +2151,10 @@ img {
     background: transparent;
   }
 
+  /* Below the open nav panel, so the blue field covers the name.
+     .menu-toggle keeps z-index 40 so it stays tappable on top. */
   .wordmark {
-    z-index: 40;
+    z-index: 20;
   }
 
   .menu-mark {

@@ -91,7 +91,7 @@
     { weights: [1.3, 1, 1.15], ratio: 21 / 9 },
   ];
 
-  const absorbedRowWeights = [1.75, 1, 1.15, 1];
+  const absorbedRowWeights = [2.4, 1, 1.05, 1];
 
   const projectRows = (items) => {
     if (!items.length) return [];
