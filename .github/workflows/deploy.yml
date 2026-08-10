@@ -39,6 +39,8 @@ jobs:
       - name: Inject imprint details from secrets
         env:
           SITE_EMAIL: ${{ secrets.SITE_EMAIL }}
+          SITE_INSTAGRAM_URL: ${{ secrets.SITE_INSTAGRAM_URL }}
+          SITE_LINKEDIN_URL: ${{ secrets.SITE_LINKEDIN_URL }}
           LEGAL_STREET: ${{ secrets.LEGAL_STREET }}
           LEGAL_POSTAL_CITY: ${{ secrets.LEGAL_POSTAL_CITY }}
           LEGAL_VAT_ID: ${{ secrets.LEGAL_VAT_ID }}

@@ -1156,7 +1156,8 @@ img {
   height: 120%;
   object-fit: contain;
   object-position: center bottom;
-  filter: contrast(0.88);
+  /* Only the portrait is desaturated; the blue field behind it stays. */
+  filter: grayscale(1) contrast(0.92);
 }
 
 .portrait-light {

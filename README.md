@@ -126,6 +126,8 @@ Secrets unter **Settings → Secrets and variables → Actions**:
 | Secret | Inhalt |
 | --- | --- |
 | `SITE_EMAIL` | Kontakt-E-Mail |
+| `SITE_INSTAGRAM_URL` | Instagram-Profil |
+| `SITE_LINKEDIN_URL` | LinkedIn-Profil |
 | `LEGAL_STREET` | Straße und Hausnummer |
 | `LEGAL_POSTAL_CITY` | PLZ und Ort |
 | `LEGAL_VAT_ID` | USt-IdNr. (optional) |

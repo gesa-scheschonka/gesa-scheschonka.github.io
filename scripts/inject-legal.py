@@ -45,6 +45,12 @@ HTML_PLACEHOLDERS = {
 
 PLACEHOLDER_EMAIL = "hello@example.com"
 
+# Placeholder profile URL in content.js -> environment variable with the real one
+SOCIAL_PLACEHOLDERS = {
+    "https://www.linkedin.com/": "SITE_LINKEDIN_URL",
+    "https://www.instagram.com/": "SITE_INSTAGRAM_URL",
+}
+
 
 def js_string(value):
     """Escape a value for use inside a double-quoted JS string literal."""
@@ -81,6 +87,12 @@ def inject_content_js(path, env):
             applied.append(key)
         else:
             print(f"::warning::no `{key}` field found in content.js")
+
+    for placeholder, env_name in SOCIAL_PLACEHOLDERS.items():
+        value = env.get(env_name, "").strip()
+        if value and f'"{placeholder}"' in source:
+            source = source.replace(f'"{placeholder}"', '"%s"' % js_string(value), 1)
+            applied.append(env_name)
 
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(source)
@@ -128,7 +140,7 @@ def main():
         if name.endswith(".html"):
             applied.update(inject_html(os.path.join(site, name), env))
 
-    expected = set(CONTENT_FIELDS) | {"SITE_EMAIL"}
+    expected = set(CONTENT_FIELDS) | set(SOCIAL_PLACEHOLDERS.values()) | {"SITE_EMAIL"}
     print(f"Injected: {', '.join(sorted(applied)) if applied else 'nothing'}")
 
     missing = sorted(name for name in expected if not env.get(name, "").strip())

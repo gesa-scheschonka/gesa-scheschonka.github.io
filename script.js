@@ -91,6 +91,8 @@
     { weights: [1.3, 1, 1.15], ratio: 21 / 9 },
   ];
 
+  const absorbedRowWeights = [1.75, 1, 1.15, 1];
+
   const projectRows = (items) => {
     if (!items.length) return [];
 
@@ -104,9 +106,13 @@
       // Absorb a lone trailing project instead of leaving it stranded.
       if (remaining - count === 1) count = remaining;
 
+      // A row that absorbs a trailing project holds one more tile than the plan
+      // describes. Give it its own weights so one tile still dominates, rather
+      // than padding with 1 and flattening the row into equal thumbnails.
+      const source = count > plan.weights.length ? absorbedRowWeights : plan.weights;
       const weights = items
         .slice(index, index + count)
-        .map((item, position) => plan.weights[position] || 1);
+        .map((item, position) => source[position] || 1);
       const total = weights.reduce((sum, weight) => sum + weight, 0);
       // Widening the row keeps tiles from growing too tall when it holds more
       // projects than the plan expected.
@@ -683,6 +689,9 @@
     if (dialogNextBtn) dialogNextBtn.dataset.projectId = nextProject.id;
 
     if (!dialog.open) dialog.showModal();
+    // showModal() focuses the first control in the dialog, which left "Prev"
+    // looking pressed. Focus the body instead so no control appears active.
+    dialogContent.focus({ preventScroll: true });
     document.body.classList.add("dialog-is-open");
 
     const motionVideos = [...dialogContent.querySelectorAll("video")];
