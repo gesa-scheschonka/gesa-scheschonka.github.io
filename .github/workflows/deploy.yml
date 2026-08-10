@@ -48,6 +48,9 @@ jobs:
           LEGAL_EDITORIAL_RESPONSIBLE: ${{ secrets.LEGAL_EDITORIAL_RESPONSIBLE }}
         run: python3 scripts/inject-legal.py _site
 
+      - name: Stamp the stylesheet with a content hash
+        run: python3 scripts/bust-cache.py _site
+
       - uses: actions/configure-pages@v5
         # Creates the Pages site on first run, so Pages does not have to be
         # switched on by hand in repository settings.
