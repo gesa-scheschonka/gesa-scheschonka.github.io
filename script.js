@@ -733,6 +733,20 @@
     openProject(projectId);
   };
 
+  // iOS Safari does not apply :active to these buttons on tap, so the fill and
+  // rotation never appeared on touch. Hold a class for the transition's length
+  // so the feedback is actually visible, however brief the tap.
+  const pressFeedback = (event) => {
+    const button = event.target.closest(".dialog-nav-btn, .dialog-close");
+    if (!button) return;
+    button.classList.add("is-pressed");
+    window.setTimeout(() => button.classList.remove("is-pressed"), 280);
+  };
+
+  document
+    .querySelector(".dialog-toolbar")
+    ?.addEventListener("pointerdown", pressFeedback);
+
   dialogPrevBtn?.addEventListener("click", () => navigateDialog(dialogPrevBtn.dataset.projectId));
   dialogNextBtn?.addEventListener("click", () => navigateDialog(dialogNextBtn.dataset.projectId));
 

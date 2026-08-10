@@ -1584,10 +1584,25 @@ img {
   }
 }
 
+/* Touch feedback. iOS does not reliably apply :active to buttons on tap, and a
+   tap is over too quickly to see in any case, so the script holds .is-pressed
+   briefly. :active covers pointer devices pressing and holding. */
 .dialog-nav-btn:active,
-.dialog-close:active {
+.dialog-close:active,
+.dialog-nav-btn.is-pressed,
+.dialog-close.is-pressed {
   background: var(--accent);
   color: var(--paper);
+}
+
+.dialog-nav-btn:active,
+.dialog-nav-btn.is-pressed {
+  transform: rotate(8deg);
+}
+
+.dialog-close:active,
+.dialog-close.is-pressed {
+  transform: rotate(90deg);
 }
 
 .dialog-nav-btn .ui-arrow,
