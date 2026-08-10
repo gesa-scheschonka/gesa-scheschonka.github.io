@@ -64,6 +64,13 @@ button {
   font: inherit;
 }
 
+/* iOS paints a translucent rectangle over any tapped control, which reads as a
+   stray square on round buttons. Controls provide their own :active feedback. */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .ui-arrow {
   --arrow-rotation: 0deg;
   display: inline-block;
@@ -280,10 +287,12 @@ img {
   transition: color 250ms ease, background 250ms ease, transform 250ms ease;
 }
 
-.circle-link:hover {
-  transform: rotate(8deg);
-  background: var(--accent);
-  color: var(--paper);
+@media (hover: hover) and (pointer: fine) {
+  .circle-link:hover {
+    transform: rotate(8deg);
+    background: var(--accent);
+    color: var(--paper);
+  }
 }
 
 .section-pad {
@@ -1328,10 +1337,17 @@ img {
   transition: transform 250ms ease;
 }
 
-.timeline-toggle:hover,
-.timeline-toggle:focus-visible {
+.timeline-toggle:focus-visible,
+.timeline-toggle:active {
   background: var(--accent);
   color: var(--paper);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .timeline-toggle:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
 }
 
 .timeline-toggle[aria-expanded="true"] .ui-arrow {
@@ -1542,23 +1558,36 @@ img {
   transition: background 250ms ease, color 250ms ease, transform 250ms ease;
 }
 
-.dialog-nav-btn:hover,
 .dialog-nav-btn:focus-visible,
-.dialog-close:hover,
 .dialog-close:focus-visible {
   background: var(--accent);
   color: var(--paper);
   outline: none;
 }
 
-.dialog-nav-btn:hover,
-.dialog-nav-btn:focus-visible {
-  transform: rotate(8deg);
+/* Touch devices keep :hover applied after a tap, which left these filled blue
+   until something else was tapped. Hover styling is limited to real pointers;
+   touch gets :active instead, which releases with the finger. */
+@media (hover: hover) and (pointer: fine) {
+  .dialog-nav-btn:hover,
+  .dialog-close:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .dialog-nav-btn:hover {
+    transform: rotate(8deg);
+  }
+
+  .dialog-close:hover {
+    transform: rotate(90deg);
+  }
 }
 
-.dialog-close:hover,
-.dialog-close:focus-visible {
-  transform: rotate(90deg);
+.dialog-nav-btn:active,
+.dialog-close:active {
+  background: var(--accent);
+  color: var(--paper);
 }
 
 .dialog-nav-btn .ui-arrow,
@@ -2054,10 +2083,16 @@ img {
 }
 
 .legal-language-switch a[aria-current="page"],
-.legal-language-switch a:hover,
 .legal-language-switch a:focus-visible {
   background: var(--accent);
   color: var(--paper);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .legal-language-switch a:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
 }
 
 /* Language-precedence note shared by both legal-page languages. */
