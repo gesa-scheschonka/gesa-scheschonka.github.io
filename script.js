@@ -41,6 +41,8 @@
     }).format(date);
   };
 
+  const projectDate = (project) => project.dateLabel || formatDate(project.year, project.month);
+
   const safeCropNumber = (value, fallback, minimum, maximum) => {
     const number = Number(value);
     return Number.isFinite(number) ? Math.min(maximum, Math.max(minimum, number)) : fallback;
@@ -497,7 +499,7 @@
         <p class="project-meta">
           <span class="project-count">${String(index + 1).padStart(2, "0")}</span>
           <span class="project-date">
-            ${escapeHTML(formatDate(project.year, project.month))}${project.location ? ` · ${escapeHTML(project.location)}` : ""}
+            ${escapeHTML(projectDate(project))}${project.location ? ` · ${escapeHTML(project.location)}` : ""}
           </span>
         </p>
         <h3>${escapeHTML(project.name)} <span class="ui-arrow ui-arrow--se" aria-hidden="true"></span></h3>
@@ -688,7 +690,7 @@
       </figure>
       <div class="dialog-copy">
         <p class="project-type">
-          ${escapeHTML(projectType(project))} · ${escapeHTML(formatDate(project.year, project.month))}
+          ${escapeHTML(projectType(project))} · ${escapeHTML(projectDate(project))}
           ${project.location ? ` · ${escapeHTML(project.location)}` : ""}
         </p>
         <h2 id="dialog-project-title">${escapeHTML(project.name)}</h2>
