@@ -1949,7 +1949,9 @@ img {
   display: flex;
   flex-wrap: wrap;
   margin: 2.25rem 0 0;
-  padding-top: 1.1rem;
+  /* Zero the browser's default list indent, or the tags sit 40px in from the
+     title and description above them. */
+  padding: 1.1rem 0 0;
   border-top: 1px solid var(--line);
   list-style: none;
 }
