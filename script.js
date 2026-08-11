@@ -179,28 +179,61 @@
     />`;
   };
 
+  // Card previews used to be one fixed collage — a large panel left, two small
+  // right — for every project. These layouts vary that, including a single
+  // panel that simply cycles through the whole set.
+  const previewLayouts = [
+    { name: "feature", panels: 3 },   // large left, two stacked right
+    { name: "single", panels: 1 },    // one frame cycling all images
+    { name: "mirror", panels: 3 },    // two stacked left, large right
+    { name: "duo", panels: 2 },       // two equal columns
+    { name: "single", panels: 1 },
+    { name: "triptych", panels: 3 },  // three equal columns
+    { name: "stack", panels: 3 },     // wide top, two below
+  ];
+
+  // Walk the projects that carry media and deal the layouts out in order, so
+  // neighbouring cards never repeat one. Hashing the id spread them unevenly —
+  // one layout landed on half the cards.
+  const assignedPreviewLayouts = new Map(
+    sortedProjects
+      .filter(hasLocalProjectMedia)
+      .map((project, index) => [project.id, previewLayouts[index % previewLayouts.length]]),
+  );
+
+  const previewLayoutFor = (project) => {
+    const requested = String(project.previewLayout || "").toLowerCase();
+    return (
+      previewLayouts.find((layout) => layout.name === requested) ||
+      assignedPreviewLayouts.get(project.id) ||
+      previewLayouts[0]
+    );
+  };
+
+  // Round-robin, so each panel cycles through its own share of the images
+  // rather than repeating whatever sits at a fixed index.
+  const dealIntoPanels = (items, count) => {
+    const panels = Array.from({ length: count }, () => []);
+    items.forEach((item, index) => panels[index % count].push(item));
+    return panels.filter((panel) => panel.length);
+  };
+
   const localMediaPreview = (project, eager = false) => {
     const items = localProjectMedia(project).filter((item) => item.preview !== false);
+    if (!items.length) return "";
 
+    const layout = previewLayoutFor(project);
     const baseDelay = safeCropNumber(project.mediaAutoplay, 1500, 1000, 10000);
-    const panelItems = [
-      [items[0], items[3]],
-      [items[1], items[4]],
-      [items[2], items[5]],
-    ];
+    const panels = dealIntoPanels(items, Math.min(layout.panels, items.length));
 
-    const panel = (panelClass, mediaItems, panelIndex) => {
-      const validItems = mediaItems.filter(Boolean);
-      if (!validItems.length) return "";
-
-      return `<div
-        class="project-media-reel project-media-panel project-media-panel--${panelClass}"
+    const panel = (mediaItems, panelIndex) => `<div
+        class="project-media-reel project-media-panel project-media-panel--${panelIndex + 1}"
         data-project-media-reel
         data-media-index="0"
         data-media-autoplay="${baseDelay + panelIndex * 450}"
         aria-hidden="true"
       >
-        ${validItems
+        ${mediaItems
           .map(
             (item, index) => `<div
               class="project-media-slide${index === 0 ? " is-active" : ""}"
@@ -212,16 +245,13 @@
           )
           .join("")}
       </div>`;
-    };
 
     return `<div
-      class="project-media-collage"
+      class="project-media-collage project-media-collage--${layout.name}"
       role="img"
       aria-label="Atmospheric media edit for ${escapeHTML(project.name)}"
     >
-      ${panel("primary", panelItems[0], 0)}
-      ${panel("secondary", panelItems[1], 1)}
-      ${panel("tertiary", panelItems[2], 2)}
+      ${panels.map(panel).join("")}
     </div>`;
   };
 

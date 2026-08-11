@@ -493,12 +493,82 @@ img {
   display: grid;
   width: 100%;
   aspect-ratio: 16 / 9;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 2px;
   overflow: hidden;
   background: var(--paper);
   transition: transform 800ms cubic-bezier(0.2, 0.7, 0, 1);
+  /* Default, overridden per layout below. */
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+/* One frame cycling the whole set — no split at all. */
+.project-media-collage--single {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* Large left, two stacked right. */
+.project-media-collage--feature .project-media-panel--1 {
+  grid-row: 1 / 3;
+}
+
+.project-media-collage--feature .project-media-panel--2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.project-media-collage--feature .project-media-panel--3 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Two stacked left, large right. */
+.project-media-collage--mirror {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+}
+
+.project-media-collage--mirror .project-media-panel--1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.project-media-collage--mirror .project-media-panel--2 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.project-media-collage--mirror .project-media-panel--3 {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+/* Two equal columns. */
+.project-media-collage--duo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* Three equal columns. */
+.project-media-collage--triptych {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* Wide top, two beneath. */
+.project-media-collage--stack {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1.25fr) minmax(0, 0.75fr);
+}
+
+.project-media-collage--stack .project-media-panel--1 {
+  grid-column: 1 / 3;
+}
+
+/* Layouts fall back gracefully when a project has fewer images than panels. */
+.project-media-collage > .project-media-panel:only-child {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
 }
 
 .project-media-collage .project-media-reel {
@@ -510,20 +580,6 @@ img {
 
 .project-media-collage .project-media-reel::after {
   display: none;
-}
-
-.project-media-panel--primary {
-  grid-row: 1 / 3;
-}
-
-.project-media-panel--secondary {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.project-media-panel--tertiary {
-  grid-column: 2;
-  grid-row: 2;
 }
 
 .project-media-reel::after {
