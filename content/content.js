@@ -112,7 +112,7 @@ const PROJECTS = [
       "Launch communications announcing Heidi Klum as a new L’Oréal Paris ambassador, timed to the opening of Cannes. The announcement introduced Revitalift Laser as her first campaign for the brand.",
     year: 2024,
     month: 5,
-    location: "Düsseldorf · Cannes",
+    location: "Cannes",
     coverTheme: "beauty",
     coverVariant: 2,
     image: "assets/images/heidi-klum-loreal-press.jpg",
@@ -196,7 +196,7 @@ const PROJECTS = [
   {
     id: "loreal-cannes-2025",
     client: "L’Oréal Paris",
-    name: "L’Oréal Paris at the Cannes Film Festival 2025",
+    name: "L’Oréal Paris at Cannes Film Festival 2025",
     coverTitle: "Cannes 2025",
     category: "PR & Media Relations",
     summary:
@@ -228,6 +228,7 @@ const PROJECTS = [
   },
   {
     id: "loreal-le-defile-2025",
+    hidden: true, // removed from the site on request; data kept
     client: "L’Oréal Paris",
     name: "Le Défilé 2025 — Walk Your Worth",
     coverTitle: "Walk Your Worth",
@@ -335,7 +336,7 @@ const PROJECTS = [
   {
     id: "ewa-herzog-wrapped-in-silence-2024",
     client: "EWA HERZOG",
-    name: "Wrapped in Silence — Spring/Summer 2025",
+    name: "Ewa Herzog Runway Show @KÖNIG GALERIE",
     coverTitle: "Wrapped in Silence",
     category: "Fashion Communications",
     summary:
@@ -469,7 +470,7 @@ const PROJECTS = [
   {
     id: "replay-breuninger-united-to-inspire",
     client: "REPLAY × Breuninger",
-    name: "United to Inspire",
+    name: "Replay x Breuninger — United to Inspire",
     coverTitle: "United to Inspire",
     category: "Launch Communications",
     summary:
@@ -683,7 +684,7 @@ const PROJECTS = [
   {
     id: "armani-beauty-bazaar-berlinale",
     client: "Armani Beauty × Harper’s Bazaar",
-    name: "Berlinale Dinner at The Feuerle Collection",
+    name: "Armani Beauty x Harper’s Bazaar Dinner & Party, Berlinale 2023",
     coverTitle: "Berlinale Dinner",
     category: "Event Communications",
     summary:
@@ -796,7 +797,7 @@ const PROJECTS = [
   {
     id: "mac-palina-rojinski-2018",
     client: "M·A·C Cosmetics × Palina Rojinski",
-    name: "Limited-Edition Lipstick Launch",
+    name: "MAC Cosmetics x Palina Rojinski Launch Party",
     coverTitle: "Palina × M·A·C",
     category: "Launch Communications",
     summary:
@@ -1009,7 +1010,7 @@ const PROJECTS = [
   {
     id: "ritz-carlton-golden-gala-2019",
     client: "The Ritz-Carlton, Berlin",
-    name: "The Golden Gala — Grand Re-Opening",
+    name: "The Golden Gala — Ritz Carlton Re-Opening",
     coverTitle: "The Golden Gala",
     category: "Event Communications",
     summary:

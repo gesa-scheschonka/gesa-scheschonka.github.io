@@ -465,10 +465,7 @@
       </figure>
       <div class="project-info">
         <p class="project-meta">
-          <span class="project-meta-left">
-            <span class="project-count">${String(index + 1).padStart(2, "0")}</span>
-            <span>${escapeHTML(projectType(project))}</span>
-          </span>
+          <span class="project-count">${String(index + 1).padStart(2, "0")}</span>
           <span class="project-date">
             ${escapeHTML(formatDate(project.year, project.month))}${project.location ? ` · ${escapeHTML(project.location)}` : ""}
           </span>
