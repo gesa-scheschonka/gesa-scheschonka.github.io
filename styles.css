@@ -669,7 +669,7 @@ img {
   position: absolute;
   z-index: 6;
   inset: 0;
-  background: url("assets/images/grain.png") repeat;
+  background: url("assets/site/grain.png") repeat;
   content: "";
   opacity: 0.22;
   pointer-events: none;
@@ -1205,7 +1205,7 @@ img {
   position: absolute;
   z-index: 4;
   inset: 0;
-  background-image: url("assets/images/grain.png");
+  background-image: url("assets/site/grain.png");
   background-size: 6rem 6rem;
   mix-blend-mode: overlay;
   opacity: 0.38;

@@ -127,7 +127,7 @@
   const hasLicensedImage = (project) => {
     const imagePath = String(project.image || "");
     const isLocalImage =
-      imagePath.startsWith("assets/images/") &&
+      imagePath.startsWith("assets/projects/") &&
       !imagePath.includes("..") &&
       !imagePath.includes(":");
     const supportedRights = ["cleared", "licensed", "editorial"].includes(project.imageRights);

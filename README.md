@@ -47,11 +47,12 @@ einfach die Zeile `hidden: true` entfernen.
 
 ### Freigegebenes Projektfoto einsetzen
 
-Nur mit geklärten Rechten. Bild nach `assets/images/` legen und im Projektblock
-ergänzen:
+Nur mit geklärten Rechten. Jedes Projekt erhält einen Ordner unter
+`assets/projects/<project-id>/`. Bilder liegen darin in `images/`, Videos in
+`videos/`. Ein einzelnes freigegebenes Bild wird im Projektblock so ergänzt:
 
 ```js
-image: "assets/images/mein-projekt.jpg",
+image: "assets/projects/mein-projekt/images/cover.jpg",
 imageAlt: "Kurze Bildbeschreibung",
 imageRights: "cleared",        // oder "licensed" / "editorial"
 imageCredit: "Fotograf:in / Rechteinhaber",
@@ -74,15 +75,15 @@ mediaAutoplay: 1500,
 media: [
   {
     type: "image",
-    src: "assets/images/project-media/mein-projekt/cover.jpg",
+    src: "assets/projects/mein-projekt/images/cover.jpg",
     alt: "Kurze Bildbeschreibung",
     hero: true,
     size: "lg",
   },
   {
     type: "video",
-    src: "assets/videos/project-media/mein-projekt/video-01.mp4",
-    poster: "assets/images/project-media/mein-projekt/video-01-poster.jpg",
+    src: "assets/projects/mein-projekt/videos/video-01.mp4",
+    poster: "assets/projects/mein-projekt/images/video-01-poster.jpg",
     alt: "Kurze Beschreibung des Videos",
     hero: true,
   },
@@ -188,9 +189,12 @@ von Drittanbietern geladen.
 ├── .github/workflows/
 │   └── deploy.yml          # Build und Deploy auf GitHub Pages
 ├── assets/
-│   ├── images/             # Profilfoto und freigegebene Projektbilder
-│   ├── logos/              # Kundenlogos
-│   └── videos/             # Projektvideos
+│   ├── projects/           # ein Ordner je Projekt
+│   │   └── <project-id>/
+│   │       ├── images/     # Projektbilder und Video-Poster
+│   │       └── videos/     # weboptimierte Projektvideos
+│   ├── site/               # gemeinsame Website-Visuals
+│   └── logos/              # Kundenlogos
 ├── content/
 │   ├── content.js          # Website- und Projekt-Tabelle
 │   └── cv.js               # Lebenslauf-Tabelle
