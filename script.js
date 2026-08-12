@@ -83,14 +83,14 @@
     .sort((a, b) => Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month));
 
   // The overview is laid out as justified rows: the first project runs full
-  // width, then every desktop row is capped at two projects. Alternating the
-  // dominant side keeps the edit varied without letting later projects shrink
-  // into three- or four-column thumbnails.
+  // width, then desktop alternates between two- and three-project rows. One
+  // project remains dominant in every row, while a hard cap of three prevents
+  // the later cases from shrinking into four-column thumbnails.
   const projectRowPlan = [
     { weights: [1.55, 1], ratio: 16 / 9 },
-    { weights: [1, 1.55], ratio: 16 / 9 },
+    { weights: [1, 1.7, 1], ratio: 21 / 9 },
     { weights: [1.35, 1], ratio: 2 / 1 },
-    { weights: [1, 1.35], ratio: 2 / 1 },
+    { weights: [1.65, 1, 1], ratio: 21 / 9 },
   ];
 
   const projectRows = (items) => {
@@ -102,7 +102,7 @@
     while (index < items.length) {
       const plan = projectRowPlan[(rows.length - 1) % projectRowPlan.length];
       const remaining = items.length - index;
-      const count = Math.min(2, remaining);
+      const count = Math.min(3, plan.weights.length, remaining);
       const weights = items
         .slice(index, index + count)
         .map((item, position) => plan.weights[position] || 1);
