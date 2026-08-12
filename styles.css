@@ -1778,6 +1778,11 @@ img {
   background: #08080c;
 }
 
+/* Featured films open a full-width row before the still-image edit. */
+.dialog-private-collage-item:only-child {
+  flex-basis: 100%;
+}
+
 .dialog-private-collage .project-media-asset {
   display: block;
   width: 100%;
@@ -2483,6 +2488,11 @@ img {
   .dialog-private-collage-item.is-mobile-wide {
     grid-column: 1 / -1;
     aspect-ratio: 16 / 10;
+  }
+
+  .dialog-private-collage-item--video {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9;
   }
 
   .project-media-story {

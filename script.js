@@ -221,7 +221,9 @@
   };
 
   const localMediaPreview = (project, eager = false) => {
-    const items = localProjectMedia(project).filter((item) => item.preview !== false);
+    const items = localProjectMedia(project).filter(
+      (item) => item.preview !== false && (!project.previewMediaType || item.type === project.previewMediaType),
+    );
     if (!items.length) return "";
 
     const layout = previewLayoutFor(project);
@@ -258,9 +260,11 @@
   };
 
   const declumpVideos = (items) => {
-    const videos = items.filter((item) => item.type === "video");
-    const rest = items.filter((item) => item.type !== "video");
-    if (!videos.length || !rest.length) return items;
+    const featuredVideos = items.filter((item) => item.type === "video" && item.size === "xl");
+    const remainingItems = items.filter((item) => !featuredVideos.includes(item));
+    const videos = remainingItems.filter((item) => item.type === "video");
+    const rest = remainingItems.filter((item) => item.type !== "video");
+    if (!videos.length || !rest.length) return [...featuredVideos, ...remainingItems];
 
     // Tall video tiles unbalance a masonry layout's trailing columns, so keep
     // a buffer of shorter images after the last one instead of spreading
@@ -272,7 +276,7 @@
       const position = Math.min(usableLength, Math.round(step * (index + 1)));
       result.splice(position, 0, video);
     });
-    return result;
+    return [...featuredVideos, ...result];
   };
 
   // Every source photo here is 3:4 and every clip 9:16, so a layout driven by
@@ -291,6 +295,12 @@
     let index = 0;
 
     while (index < items.length) {
+      if (items[index].size === "xl") {
+        rows.push({ plan: { weights: [1], ratio: "16 / 9" }, items: [items[index]] });
+        index += 1;
+        continue;
+      }
+
       const plan = collageRowPlan[rows.length % collageRowPlan.length];
       const remaining = items.length - index;
       let count = Math.min(plan.weights.length, remaining);
@@ -321,7 +331,8 @@
             ${items
               .map((item, position) => {
                 const isVideo = item.type === "video";
-                const weight = (plan.weights[position] || 1) * (item.size === "lg" ? 1.3 : 1);
+                const sizeMultiplier = item.size === "xl" ? 1.85 : item.size === "lg" ? 1.3 : 1;
+                const weight = (plan.weights[position] || 1) * sizeMultiplier;
                 const eager = itemIndex++ < 4;
 
                 return `<figure
