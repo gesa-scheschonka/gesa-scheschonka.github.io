@@ -83,17 +83,15 @@
     .sort((a, b) => Number(b.year) - Number(a.year) || Number(b.month) - Number(a.month));
 
   // The overview is laid out as justified rows: the first project runs full
-  // width at its own aspect ratio, and every following row is filled edge to
-  // edge. Each row cycles through this plan, so any number of projects — now
-  // or later — slots in without leaving a short, ragged row.
+  // width, then every desktop row is capped at two projects. Alternating the
+  // dominant side keeps the edit varied without letting later projects shrink
+  // into three- or four-column thumbnails.
   const projectRowPlan = [
     { weights: [1.55, 1], ratio: 16 / 9 },
-    { weights: [1, 1.35, 1], ratio: 21 / 9 },
-    { weights: [1, 1.7], ratio: 2 / 1 },
-    { weights: [1.3, 1, 1.15], ratio: 21 / 9 },
+    { weights: [1, 1.55], ratio: 16 / 9 },
+    { weights: [1.35, 1], ratio: 2 / 1 },
+    { weights: [1, 1.35], ratio: 2 / 1 },
   ];
-
-  const absorbedRowWeights = [2.4, 1, 1.05, 1];
 
   const projectRows = (items) => {
     if (!items.length) return [];
@@ -104,21 +102,13 @@
     while (index < items.length) {
       const plan = projectRowPlan[(rows.length - 1) % projectRowPlan.length];
       const remaining = items.length - index;
-      let count = Math.min(plan.weights.length, remaining);
-      // Absorb a lone trailing project instead of leaving it stranded.
-      if (remaining - count === 1) count = remaining;
-
-      // A row that absorbs a trailing project holds one more tile than the plan
-      // describes. Give it its own weights so one tile still dominates, rather
-      // than padding with 1 and flattening the row into equal thumbnails.
-      const source = count > plan.weights.length ? absorbedRowWeights : plan.weights;
+      const count = Math.min(2, remaining);
       const weights = items
         .slice(index, index + count)
-        .map((item, position) => source[position] || 1);
+        .map((item, position) => plan.weights[position] || 1);
       const total = weights.reduce((sum, weight) => sum + weight, 0);
-      // Widening the row keeps tiles from growing too tall when it holds more
-      // projects than the plan expected.
-      const ratio = plan.ratio * (count / plan.weights.length);
+      // A trailing single project becomes another generous full-width feature.
+      const ratio = count === 1 ? 16 / 9 : plan.ratio;
 
       rows.push({
         items: items.slice(index, index + count),
