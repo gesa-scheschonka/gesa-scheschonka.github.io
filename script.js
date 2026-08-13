@@ -145,29 +145,48 @@
 
   const hasLocalProjectMedia = (project) => localProjectMedia(project).length > 0;
 
-  const localMediaElement = (item, { context = "card", eager = false, autoplay = false } = {}) => {
+  const cardImageSource = (source) => {
+    const path = String(source || "");
+    const lastSlash = path.lastIndexOf("/");
+    if (lastSlash < 0 || !/\.jpe?g$/i.test(path)) return path;
+    return `${path.slice(0, lastSlash)}/previews/${path.slice(lastSlash + 1)}`;
+  };
+
+  const localMediaElement = (
+    item,
+    { context = "card", eager = false, defer = false } = {},
+  ) => {
     const alt = escapeHTML(item.alt || "Event atmosphere");
+    const deferSource = context === "card" ? defer : !eager;
 
     if (item.type === "video") {
-      const deferSource = context === "card";
+      const posterSource =
+        context === "card" && item.poster ? cardImageSource(item.poster) : item.poster;
+      const deferPoster = context === "card" && defer;
       return `<video
         class="project-media-asset project-media-video"
         muted
         loop
         playsinline
-        preload="${deferSource ? "none" : "metadata"}"
-        ${autoplay ? "autoplay" : ""}
-        ${item.poster ? `poster="${escapeHTML(item.poster)}"` : ""}
+        preload="none"
+        ${
+          posterSource
+            ? `${deferPoster ? "data-poster" : "poster"}="${escapeHTML(posterSource)}"`
+            : ""
+        }
         aria-label="${alt}"
-      ><source ${deferSource ? "data-src" : "src"}="${escapeHTML(item.src)}" type="video/mp4" /></video>`;
+      ><source data-src="${escapeHTML(item.src)}" type="video/mp4" /></video>`;
     }
+
+    const imageSource = context === "card" ? cardImageSource(item.src) : item.src;
 
     return `<img
       class="project-media-asset"
-      src="${escapeHTML(item.src)}"
+      ${deferSource ? `data-src="${escapeHTML(imageSource)}"` : `src="${escapeHTML(imageSource)}"`}
       alt="${alt}"
       loading="${eager ? "eager" : "lazy"}"
       decoding="async"
+      fetchpriority="${eager ? "high" : "low"}"
     />`;
   };
 
@@ -235,6 +254,7 @@
             >${localMediaElement(item, {
               context: "card",
               eager: eager && panelIndex === 0 && index === 0,
+              defer: index !== 0,
             })}</div>`,
           )
           .join("")}
@@ -320,7 +340,6 @@
           ({ plan, items }) => `<div class="dialog-private-collage-row" style="--row-ratio:${plan.ratio}">
             ${items
               .map((item, position) => {
-                const isVideo = item.type === "video";
                 const sizeMultiplier = item.size === "xl" ? 1.85 : item.size === "lg" ? 1.3 : 1;
                 const weight = (plan.weights[position] || 1) * sizeMultiplier;
                 const eager = itemIndex++ < 4;
@@ -328,7 +347,7 @@
                 return `<figure
                   class="dialog-private-collage-item dialog-private-collage-item--${item.type}${item === lastItem ? " is-mobile-wide" : ""}"
                   style="--w:${weight.toFixed(3)}"
-                >${localMediaElement(item, { context: "dialog", eager, autoplay: isVideo })}</figure>`;
+                >${localMediaElement(item, { context: "dialog", eager, defer: !eager })}</figure>`;
               })
               .join("")}
           </div>`,
@@ -347,12 +366,17 @@
       const objectPosition = String(project.imagePosition || "").match(
         /^\d{1,3}(?:\.\d+)?%\s+\d{1,3}(?:\.\d+)?%$/,
       )?.[0];
+      const imageSource = context === "card" ? cardImageSource(project.image) : project.image;
       return `<img
         class="project-image${context === "dialog" ? " dialog-image" : ""}"
-        src="${escapeHTML(project.image)}"
+        src="${escapeHTML(imageSource)}"
         alt="${escapeHTML(project.imageAlt || project.name)}"
         ${context === "card" && objectPosition ? `style="object-position:${objectPosition}"` : ""}
-        ${context === "card" ? `loading="${eager ? "eager" : "lazy"}"` : ""}
+        ${
+          context === "card"
+            ? `loading="${eager ? "eager" : "lazy"}" decoding="async" fetchpriority="${eager ? "high" : "low"}"`
+            : ""
+        }
       />`;
     }
 
@@ -381,6 +405,27 @@
 
   const projectMediaReelTimers = new Map();
   let projectMediaReelObserver;
+  let dialogMediaObserver;
+
+  const connectionPrefersLessData = () => {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    return Boolean(
+      connection?.saveData ||
+        ["slow-2g", "2g"].includes(String(connection?.effectiveType || "").toLowerCase()),
+    );
+  };
+
+  const loadProjectImage = (image) => {
+    if (!image?.dataset.src) return;
+    image.src = image.dataset.src;
+    image.removeAttribute("data-src");
+  };
+
+  const loadProjectVideoPoster = (video) => {
+    if (!video?.dataset.poster) return;
+    video.poster = video.dataset.poster;
+    video.removeAttribute("data-poster");
+  };
 
   const loadProjectVideo = (video) => {
     const source = video?.querySelector("source[data-src]");
@@ -388,6 +433,16 @@
     source.src = source.dataset.src;
     source.removeAttribute("data-src");
     video.load();
+  };
+
+  const prepareProjectMediaSlide = (slide, { play = false } = {}) => {
+    const image = slide?.querySelector("img[data-src]");
+    if (image) loadProjectImage(image);
+
+    const video = slide?.querySelector("video");
+    if (!video) return;
+    loadProjectVideoPoster(video);
+    if (play) loadProjectVideo(video);
   };
 
   const stopProjectMediaReel = (reel) => {
@@ -405,6 +460,11 @@
 
     slides.forEach((slide, slideIndex) => {
       const isActive = slideIndex === index;
+      if (isActive) {
+        prepareProjectMediaSlide(slide, {
+          play: reel.dataset.mediaInView === "true" && !connectionPrefersLessData(),
+        });
+      }
       slide.classList.toggle("is-active", isActive);
       slide.setAttribute("aria-hidden", String(!isActive));
 
@@ -419,11 +479,19 @@
       video.currentTime = 0;
       video.play().catch(() => {});
     });
+
+    // Prepare only the next still while the current slide is visible. This
+    // keeps the transition smooth without asking the browser for the entire
+    // hidden gallery at once. Videos remain poster-only until they are active.
+    const nextSlide = slides[(index + 1) % slides.length];
+    const nextImage = nextSlide?.querySelector("img[data-src]");
+    if (nextImage) loadProjectImage(nextImage);
   };
 
   const startProjectMediaReel = (reel) => {
     if (reel.dataset.mediaInView !== "true") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (connectionPrefersLessData()) return;
     if (projectMediaReelTimers.has(reel)) return;
 
     const slides = reel.querySelectorAll(".project-media-slide");
@@ -455,7 +523,7 @@
             }
           });
         },
-        { threshold: 0.2, rootMargin: "200px 0px" },
+        { threshold: 0.2, rootMargin: "80px 0px" },
       );
     }
 
@@ -474,6 +542,61 @@
         startProjectMediaReel(reel);
       }
     });
+  };
+
+  const stopDialogMedia = () => {
+    dialogMediaObserver?.disconnect();
+    dialogMediaObserver = undefined;
+    dialogContent.querySelectorAll("video").forEach((video) => video.pause());
+  };
+
+  const setupDialogMedia = () => {
+    stopDialogMedia();
+
+    const media = [...dialogContent.querySelectorAll("img[data-src], video")];
+    if (!media.length) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const allowVideo = !reduceMotion && !connectionPrefersLessData();
+
+    if (!("IntersectionObserver" in window)) {
+      media.forEach((item) => {
+        if (item.matches("img")) loadProjectImage(item);
+        else if (allowVideo) {
+          loadProjectVideo(item);
+          item.muted = true;
+          item.play().catch(() => {});
+        }
+      });
+      return;
+    }
+
+    dialogMediaObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const item = entry.target;
+          if (item.matches("img")) {
+            if (entry.isIntersecting) {
+              loadProjectImage(item);
+              dialogMediaObserver?.unobserve(item);
+            }
+            return;
+          }
+
+          if (!entry.isIntersecting || !allowVideo) {
+            item.pause();
+            return;
+          }
+
+          loadProjectVideo(item);
+          item.muted = true;
+          item.play().catch(() => {});
+        });
+      },
+      { threshold: 0.05, rootMargin: "120px 0px" },
+    );
+
+    media.forEach((item) => dialogMediaObserver.observe(item));
   };
 
   const projectCard = (project, index, card) => `
@@ -723,17 +846,11 @@
     // looking pressed. Focus the body instead so no control appears active.
     dialogContent.focus({ preventScroll: true });
     document.body.classList.add("dialog-is-open");
-
-    const motionVideos = [...dialogContent.querySelectorAll("video")];
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    motionVideos.forEach((video) => {
-      video.muted = true;
-      if (reduceMotion) video.pause();
-      else video.play().catch(() => {});
-    });
+    setupDialogMedia();
   };
 
   const prepareProjectDialogClose = () => {
+    stopDialogMedia();
     dialogContent.querySelectorAll("video").forEach((video) => {
       video.pause();
       video.removeAttribute("src");

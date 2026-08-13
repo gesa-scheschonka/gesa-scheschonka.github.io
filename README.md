@@ -141,12 +141,13 @@ roten Hinweis. Der Deploy schlägt deshalb nicht fehl.
 ## Veröffentlichen
 
 Jeder Push auf `main` startet den Workflow `.github/workflows/deploy.yml`:
-Dateien zusammenstellen → Secrets einsetzen → `styles.css` mit einem Hash
+Dateien zusammenstellen → Secrets einsetzen → CSS und JavaScript mit stabilen Hashes
 versehen → auf GitHub Pages veröffentlichen.
 
-Der Hash ersetzt die Versionsnummer in `styles.css?v=…`. Ohne ihn liefern
-Browser nach einer CSS-Änderung weiter die alte, zwischengespeicherte Datei
-aus – die Änderung wäre live, aber nicht sichtbar.
+Die Hashes ersetzen die Versionsnummern der statischen Dateien. Sie ändern sich
+nur, wenn sich der jeweilige Inhalt ändert. So bleiben Aktualisierungen sicher,
+während Browser und CDN unveränderte Dateien bei wiederholten Besuchen aus dem
+Cache laden können.
 
 Einmalig nötig: **Settings → Pages → Source: GitHub Actions**.
 
@@ -200,7 +201,9 @@ von Drittanbietern geladen.
 │   └── cv.js               # Lebenslauf-Tabelle
 ├── scripts/
 │   ├── inject-legal.py     # setzt die Impressumsdaten aus den Secrets ein
-│   └── bust-cache.py       # hängt einen Hash an styles.css (Browser-Cache)
+│   ├── bust-cache.py       # versieht CSS und JavaScript mit stabilen Hashes
+│   ├── optimize-images.py  # optimiert JPEGs und erzeugt kleine Grid-Vorschauen
+│   └── optimize-media.sh   # komprimiert MP4s für schnelle Web-Wiedergabe
 ├── index.html
 ├── impressum.html
 ├── datenschutz.html

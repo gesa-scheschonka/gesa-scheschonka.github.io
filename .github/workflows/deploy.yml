@@ -48,7 +48,7 @@ jobs:
           LEGAL_EDITORIAL_RESPONSIBLE: ${{ secrets.LEGAL_EDITORIAL_RESPONSIBLE }}
         run: python3 scripts/inject-legal.py _site
 
-      - name: Stamp the stylesheet with a content hash
+      - name: Stamp static assets with content hashes
         run: python3 scripts/bust-cache.py _site
 
       - uses: actions/configure-pages@v5
