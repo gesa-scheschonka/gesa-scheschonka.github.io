@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
-"""Create lightweight card previews and optimize full project JPEGs.
+"""Create source-aware card previews without re-encoding detail images.
 
-Full-size images remain in place for project detail views. Each image also gets
-a progressive 960 px preview in an adjacent ``previews`` directory, preserving
-the same project-based folder structure.
+The full-size JPEGs are the portfolio masters and remain byte-for-byte intact
+for project detail views. Each image also gets a card preview in an adjacent
+``previews`` directory. Small or already heavily compressed sources are copied
+unchanged, avoiding a visibly damaging second JPEG pass. Larger masters are
+resized to a 1600 px bounding box for sharper cards in the variable desktop
+grid.
 """
 
 from __future__ import annotations
 
-import os
+import shutil
 import sys
 from pathlib import Path
 
 from PIL import Image, ImageOps
 
 
-def save_jpeg(image: Image.Image, path: Path, *, quality: int) -> None:
+def save_jpeg(
+    image: Image.Image,
+    path: Path,
+    *,
+    quality: int,
+    icc_profile: bytes | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(
         path,
@@ -24,6 +33,7 @@ def save_jpeg(image: Image.Image, path: Path, *, quality: int) -> None:
         optimize=True,
         progressive=True,
         subsampling="4:2:0",
+        icc_profile=icc_profile,
     )
 
 
@@ -40,21 +50,30 @@ def main() -> int:
 
     for source in sorted(projects.glob("*/images/*.jpg")):
         with Image.open(source) as opened:
+            icc_profile = opened.info.get("icc_profile")
             original = ImageOps.exif_transpose(opened).convert("RGB")
-            preview = original.copy()
-            preview.thumbnail((960, 960), Image.Resampling.LANCZOS)
-
             preview_path = source.parent / "previews" / source.name
-            save_jpeg(preview, preview_path, quality=78)
+            width, height = original.size
+            max_dimension = max(width, height)
+            source_size = source.stat().st_size
 
-            temporary = source.with_suffix(".optimized.jpg")
-            save_jpeg(original, temporary, quality=84)
-            if temporary.stat().st_size < source.stat().st_size:
-                os.replace(temporary, source)
+            # Images that are already card-sized, and efficient web sources up
+            # to 2000 px, gain too little from another JPEG generation to make
+            # the added artifacts worthwhile.
+            preserve_source = max_dimension <= 1600 or (
+                max_dimension <= 2000 and source_size <= 400 * 1024
+            )
+
+            if preserve_source:
+                preview_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, preview_path)
             else:
-                temporary.unlink()
+                preview = original.copy()
+                preview.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+                save_jpeg(preview, preview_path, quality=88, icc_profile=icc_profile)
 
-        print(f"Optimized {source.relative_to(site)}")
+        action = "Copied" if preserve_source else "Created"
+        print(f"{action} preview for {source.relative_to(site)}")
 
     for preview in sorted(projects.glob("*/images/previews/*.jpg")):
         source = preview.parent.parent / preview.name

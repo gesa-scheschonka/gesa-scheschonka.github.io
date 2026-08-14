@@ -366,7 +366,10 @@
       const objectPosition = String(project.imagePosition || "").match(
         /^\d{1,3}(?:\.\d+)?%\s+\d{1,3}(?:\.\d+)?%$/,
       )?.[0];
-      const imageSource = context === "card" ? cardImageSource(project.image) : project.image;
+      // Licensed press images have already been prepared and compressed by
+      // their publisher. Use that cleared original in the grid as well as the
+      // detail view so it never goes through a second lossy JPEG pass.
+      const imageSource = project.image;
       return `<img
         class="project-image${context === "dialog" ? " dialog-image" : ""}"
         src="${escapeHTML(imageSource)}"

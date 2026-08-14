@@ -202,7 +202,7 @@ von Drittanbietern geladen.
 ├── scripts/
 │   ├── inject-legal.py     # setzt die Impressumsdaten aus den Secrets ein
 │   ├── bust-cache.py       # versieht CSS und JavaScript mit stabilen Hashes
-│   ├── optimize-images.py  # optimiert JPEGs und erzeugt kleine Grid-Vorschauen
+│   ├── optimize-images.py  # erzeugt scharfe, quellenschonende Grid-Vorschauen
 │   └── optimize-media.sh   # komprimiert MP4s für schnelle Web-Wiedergabe
 ├── index.html
 ├── impressum.html
@@ -213,6 +213,9 @@ von Drittanbietern geladen.
 
 ## Hinweise
 
+- `optimize-images.py` verändert die Originalbilder in den Projektordnern
+  nicht. Es erzeugt nur separate Vorschauen; bereits kleine oder effizient
+  komprimierte Quellen werden dabei unverändert kopiert.
 - Die Seite lädt keine externen Schriften, Skripte oder Einbettungen – beim
   Aufruf entsteht keine Verbindung zu Dritten.
 - Projektansicht, Navigation und Animationen funktionieren mit Tastatur und
