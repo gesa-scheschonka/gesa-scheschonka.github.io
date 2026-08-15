@@ -12,6 +12,12 @@
   }
 
   const { site, projects, clients = [] } = content;
+  const assetVersion = String(window.PORTFOLIO_ASSET_VERSION || "");
+  const versionedAssetSource = (source) => {
+    const path = String(source || "");
+    if (!assetVersion || !path.startsWith("assets/")) return path;
+    return `${path}${path.includes("?") ? "&" : "?"}v=${encodeURIComponent(assetVersion)}`;
+  };
   const cv = window.PORTFOLIO_CV || [];
   const projectList = document.querySelector("#project-list");
   const projectCount = document.querySelector("#project-count");
@@ -152,6 +158,13 @@
     return `${path.slice(0, lastSlash)}/previews/${path.slice(lastSlash + 1)}`;
   };
 
+  const cardVideoSource = (source) => {
+    const path = String(source || "");
+    const lastSlash = path.lastIndexOf("/");
+    if (lastSlash < 0 || !/\.mp4$/i.test(path)) return path;
+    return `${path.slice(0, lastSlash)}/previews/${path.slice(lastSlash + 1)}`;
+  };
+
   const localMediaElement = (
     item,
     { context = "card", eager = false, defer = false } = {},
@@ -160,6 +173,7 @@
     const deferSource = context === "card" ? defer : !eager;
 
     if (item.type === "video") {
+      const videoSource = context === "card" ? cardVideoSource(item.src) : item.src;
       const posterSource =
         context === "card" && item.poster ? cardImageSource(item.poster) : item.poster;
       const deferPoster = context === "card" && defer;
@@ -175,7 +189,7 @@
             : ""
         }
         aria-label="${alt}"
-      ><source data-src="${escapeHTML(item.src)}" type="video/mp4" /></video>`;
+      ><source data-src="${escapeHTML(versionedAssetSource(videoSource))}" type="video/mp4" /></video>`;
     }
 
     const imageSource = context === "card" ? cardImageSource(item.src) : item.src;
@@ -343,9 +357,15 @@
                 const sizeMultiplier = item.size === "xl" ? 1.85 : item.size === "lg" ? 1.3 : 1;
                 const weight = (plan.weights[position] || 1) * sizeMultiplier;
                 const eager = itemIndex++ < 4;
+                const orientationClass =
+                  item.type === "video"
+                    ? item.orientation === "landscape" || item.size === "xl"
+                      ? " is-landscape"
+                      : " is-portrait"
+                    : "";
 
                 return `<figure
-                  class="dialog-private-collage-item dialog-private-collage-item--${item.type}${item === lastItem ? " is-mobile-wide" : ""}"
+                  class="dialog-private-collage-item dialog-private-collage-item--${item.type}${orientationClass}${item === lastItem ? " is-mobile-wide" : ""}"
                   style="--w:${weight.toFixed(3)}"
                 >${localMediaElement(item, { context: "dialog", eager, defer: !eager })}</figure>`;
               })
@@ -430,8 +450,10 @@
     video.removeAttribute("data-poster");
   };
 
-  const loadProjectVideo = (video) => {
-    const source = video?.querySelector("source[data-src]");
+  const loadProjectVideo = (video, preload = "auto") => {
+    if (!video) return;
+    if (preload) video.preload = preload;
+    const source = video.querySelector("source[data-src]");
     if (!source) return;
     source.src = source.dataset.src;
     source.removeAttribute("data-src");
@@ -483,12 +505,17 @@
       video.play().catch(() => {});
     });
 
-    // Prepare only the next still while the current slide is visible. This
-    // keeps the transition smooth without asking the browser for the entire
-    // hidden gallery at once. Videos remain poster-only until they are active.
+    // Prepare one slide ahead while the current slide is visible. Card videos
+    // use short 720p preview files, so preloading the next one keeps the cross-
+    // fade smooth without pulling the much larger detail encode into the grid.
     const nextSlide = slides[(index + 1) % slides.length];
     const nextImage = nextSlide?.querySelector("img[data-src]");
     if (nextImage) loadProjectImage(nextImage);
+    const nextVideo = nextSlide?.querySelector("video");
+    if (nextVideo && reel.dataset.mediaInView === "true" && !connectionPrefersLessData()) {
+      loadProjectVideoPoster(nextVideo);
+      loadProjectVideo(nextVideo, "auto");
+    }
   };
 
   const startProjectMediaReel = (reel) => {

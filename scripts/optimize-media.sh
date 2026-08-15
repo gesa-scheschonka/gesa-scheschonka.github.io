@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Re-encode the portfolio's muted motion assets for web delivery. The originals
-# were mostly 540 × 960 clips at roughly 5 Mbps (and sometimes 60–120 fps),
-# which is far above what the on-page cards need. This keeps the same paths and
-# dimensions while removing unused audio, capping frame rate, and retaining
-# progressive MP4 playback via fast-start metadata.
+# Build lightweight six-second card previews from the portfolio's full-quality
+# detail videos. The detail files are deliberately never overwritten here:
+# they are first-generation 1080p (or native 720p) web encodes made from the
+# supplied camera originals, while the overview uses these smaller derivatives.
 
 site_dir="${1:-.}"
 media_dir="$site_dir/assets/projects"
@@ -16,33 +15,49 @@ if [[ ! -d "$media_dir" ]]; then
 fi
 
 while IFS= read -r -d '' source <&3; do
-  temporary="${source%.mp4}.optimized.mp4"
+  source_dir="${source%/*}"
+  preview_dir="$source_dir/previews"
+  preview="$preview_dir/${source##*/}"
+  mkdir -p "$preview_dir"
+
   width="$(
     ffprobe -v error -select_streams v:0 -show_entries stream=width \
       -of default=noprint_wrappers=1:nokey=1 "$source" | head -n 1
   )"
+  height="$(
+    ffprobe -v error -select_streams v:0 -show_entries stream=height \
+      -of default=noprint_wrappers=1:nokey=1 "$source" | head -n 1
+  )"
 
-  # The two horizontal Furla films are intentionally hero-sized. Keep them at
-  # 1440 px wide; portrait/mobile clips retain their existing dimensions.
-  if (( width > 1440 )); then
-    video_filter="scale=1440:-2:flags=lanczos,fps=30"
+  if (( width > height )); then
+    video_filter="scale=w='min(1280,iw)':h=-2:flags=lanczos,fps=25"
+    keyframe_interval=50
+    minimum_keyframe_interval=25
   else
-    video_filter="fps=30"
+    video_filter="scale=w='min(720,iw)':h=-2:flags=lanczos"
+    keyframe_interval=60
+    minimum_keyframe_interval=30
   fi
 
   ffmpeg -y -hide_banner -loglevel error \
     -i "$source" \
+    -t 6 \
+    -map 0:v:0 \
     -map_metadata 0 \
     -vf "$video_filter" \
     -c:v libx264 \
     -preset slow \
-    -crf 24 \
+    -crf 23 \
     -profile:v high \
     -pix_fmt yuv420p \
+    -g "$keyframe_interval" \
+    -keyint_min "$minimum_keyframe_interval" \
     -movflags +faststart \
     -an \
-    "$temporary"
+    "$preview"
 
-  mv "$temporary" "$source"
-  echo "Optimized ${source#$site_dir/}"
-done 3< <(find "$media_dir" -type f -name '*.mp4' -print0)
+  echo "Built ${preview#$site_dir/}"
+done 3< <(
+  find "$media_dir" -type f -path '*/videos/*.mp4' \
+    ! -path '*/videos/previews/*' -print0
+)
