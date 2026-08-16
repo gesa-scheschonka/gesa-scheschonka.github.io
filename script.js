@@ -154,8 +154,9 @@
   const cardImageSource = (source) => {
     const path = String(source || "");
     const lastSlash = path.lastIndexOf("/");
-    if (lastSlash < 0 || !/\.jpe?g$/i.test(path)) return path;
-    return `${path.slice(0, lastSlash)}/previews/${path.slice(lastSlash + 1)}`;
+    if (lastSlash < 0 || !/\.(?:jpe?g|png)$/i.test(path)) return path;
+    const filename = path.slice(lastSlash + 1).replace(/\.(?:jpe?g|png)$/i, ".jpg");
+    return `${path.slice(0, lastSlash)}/previews/${filename}`;
   };
 
   const cardVideoSource = (source) => {
@@ -174,9 +175,17 @@
 
     if (item.type === "video") {
       const videoSource = context === "card" ? cardVideoSource(item.src) : item.src;
+      const originalCandidate = String(item.originalSrc || "");
+      const originalVideoSource =
+        context === "dialog" &&
+        originalCandidate.startsWith("assets/") &&
+        !originalCandidate.includes("..")
+          ? originalCandidate
+          : "";
       const posterSource =
         context === "card" && item.poster ? cardImageSource(item.poster) : item.poster;
-      const deferPoster = context === "card" && defer;
+      const versionedPosterSource = posterSource ? versionedAssetSource(posterSource) : "";
+      const deferPoster = defer;
       return `<video
         class="project-media-asset project-media-video"
         muted
@@ -184,19 +193,24 @@
         playsinline
         preload="none"
         ${
-          posterSource
-            ? `${deferPoster ? "data-poster" : "poster"}="${escapeHTML(posterSource)}"`
+          versionedPosterSource
+            ? `${deferPoster ? "data-poster" : "poster"}="${escapeHTML(versionedPosterSource)}"`
             : ""
         }
         aria-label="${alt}"
-      ><source data-src="${escapeHTML(versionedAssetSource(videoSource))}" type="video/mp4" /></video>`;
+      >${
+        originalVideoSource
+          ? `<source data-src="${escapeHTML(versionedAssetSource(originalVideoSource))}" type='video/mp4; codecs="hvc1"' />`
+          : ""
+      }<source data-src="${escapeHTML(versionedAssetSource(videoSource))}" type="video/mp4" /></video>`;
     }
 
     const imageSource = context === "card" ? cardImageSource(item.src) : item.src;
+    const versionedImageSource = versionedAssetSource(imageSource);
 
     return `<img
       class="project-media-asset"
-      ${deferSource ? `data-src="${escapeHTML(imageSource)}"` : `src="${escapeHTML(imageSource)}"`}
+      ${deferSource ? `data-src="${escapeHTML(versionedImageSource)}"` : `src="${escapeHTML(versionedImageSource)}"`}
       alt="${alt}"
       loading="${eager ? "eager" : "lazy"}"
       decoding="async"
@@ -392,7 +406,7 @@
       const imageSource = project.image;
       return `<img
         class="project-image${context === "dialog" ? " dialog-image" : ""}"
-        src="${escapeHTML(imageSource)}"
+        src="${escapeHTML(versionedAssetSource(imageSource))}"
         alt="${escapeHTML(project.imageAlt || project.name)}"
         ${context === "card" && objectPosition ? `style="object-position:${objectPosition}"` : ""}
         ${
@@ -453,10 +467,12 @@
   const loadProjectVideo = (video, preload = "auto") => {
     if (!video) return;
     if (preload) video.preload = preload;
-    const source = video.querySelector("source[data-src]");
-    if (!source) return;
-    source.src = source.dataset.src;
-    source.removeAttribute("data-src");
+    const sources = [...video.querySelectorAll("source[data-src]")];
+    if (!sources.length) return;
+    sources.forEach((source) => {
+      source.src = source.dataset.src;
+      source.removeAttribute("data-src");
+    });
     video.load();
   };
 

@@ -83,6 +83,8 @@ media: [
   {
     type: "video",
     src: "assets/projects/mein-projekt/videos/video-01.mp4",
+    // Optional: unveränderte HEVC/HDR-Quelle für kompatible Browser.
+    originalSrc: "assets/projects/mein-projekt/videos/originals/video-01.mp4",
     poster: "assets/projects/mein-projekt/images/video-01-poster.jpg",
     alt: "Kurze Beschreibung des Videos",
     hero: true,
@@ -192,8 +194,8 @@ von Drittanbietern geladen.
 ├── assets/
 │   ├── projects/           # ein Ordner je Projekt
 │   │   └── <project-id>/
-│   │       ├── images/     # Projektbilder und Video-Poster
-│   │       └── videos/     # weboptimierte Projektvideos
+│   │       ├── images/     # Detailbilder, Poster und leichte Grid-Vorschauen
+│   │       └── videos/     # Detailvideos plus previews/ und optional originals/
 │   ├── site/               # gemeinsame Website-Visuals
 │   └── logos/              # Kundenlogos
 ├── content/
@@ -203,7 +205,7 @@ von Drittanbietern geladen.
 │   ├── inject-legal.py     # setzt die Impressumsdaten aus den Secrets ein
 │   ├── bust-cache.py       # versieht CSS und JavaScript mit stabilen Hashes
 │   ├── optimize-images.py  # erzeugt scharfe, quellenschonende Grid-Vorschauen
-│   └── optimize-media.sh   # komprimiert MP4s für schnelle Web-Wiedergabe
+│   └── optimize-media.sh   # erzeugt kurze, leichte Video-Vorschauen fürs Grid
 ├── index.html
 ├── impressum.html
 ├── datenschutz.html
@@ -216,6 +218,8 @@ von Drittanbietern geladen.
 - `optimize-images.py` verändert die Originalbilder in den Projektordnern
   nicht. Es erzeugt nur separate Vorschauen; bereits kleine oder effizient
   komprimierte Quellen werden dabei unverändert kopiert.
+- `optimize-media.sh` verändert die Detailvideos und Originalquellen nicht. Es
+  erzeugt ausschließlich kurze Dateien unter `videos/previews/`.
 - Die Seite lädt keine externen Schriften, Skripte oder Einbettungen – beim
   Aufruf entsteht keine Verbindung zu Dritten.
 - Projektansicht, Navigation und Animationen funktionieren mit Tastatur und

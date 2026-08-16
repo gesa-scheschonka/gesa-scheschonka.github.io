@@ -59,5 +59,6 @@ while IFS= read -r -d '' source <&3; do
   echo "Built ${preview#$site_dir/}"
 done 3< <(
   find "$media_dir" -type f -path '*/videos/*.mp4' \
-    ! -path '*/videos/previews/*' -print0
+    ! -path '*/videos/previews/*' \
+    ! -path '*/videos/originals/*' -print0
 )

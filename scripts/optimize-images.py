@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Create source-aware card previews without re-encoding detail images.
 
-The full-size JPEGs are the portfolio masters and remain byte-for-byte intact
-for project detail views. Each image also gets a card preview in an adjacent
-``previews`` directory. Small or already heavily compressed sources are copied
-unchanged, avoiding a visibly damaging second JPEG pass. Larger masters are
-resized to a 1600 px bounding box for sharper cards in the variable desktop
-grid.
+The full-size JPEG and PNG files are the portfolio masters and remain
+byte-for-byte intact for project detail views. Each image also gets a JPEG card
+preview in an adjacent ``previews`` directory. Small or already heavily
+compressed JPEG sources are copied unchanged, avoiding a visibly damaging
+second pass. PNG masters and larger JPEGs are resized to a 1600 px bounding box
+for sharper cards in the variable desktop grid.
 """
 
 from __future__ import annotations
@@ -48,11 +48,23 @@ def main() -> int:
         print(f"Project media directory not found: {projects}", file=sys.stderr)
         return 1
 
-    for source in sorted(projects.glob("*/images/*.jpg")):
+    sources = sorted(
+        source
+        for pattern in ("*.jpg", "*.jpeg", "*.png")
+        for source in projects.glob(f"*/images/{pattern}")
+    )
+
+    for source in sources:
         with Image.open(source) as opened:
             icc_profile = opened.info.get("icc_profile")
-            original = ImageOps.exif_transpose(opened).convert("RGB")
-            preview_path = source.parent / "previews" / source.name
+            oriented = ImageOps.exif_transpose(opened)
+            if oriented.mode in {"RGBA", "LA"} or "transparency" in oriented.info:
+                rgba = oriented.convert("RGBA")
+                background = Image.new("RGBA", rgba.size, (243, 240, 232, 255))
+                original = Image.alpha_composite(background, rgba).convert("RGB")
+            else:
+                original = oriented.convert("RGB")
+            preview_path = source.parent / "previews" / f"{source.stem}.jpg"
             width, height = original.size
             max_dimension = max(width, height)
             source_size = source.stat().st_size
@@ -60,8 +72,9 @@ def main() -> int:
             # Images that are already card-sized, and efficient web sources up
             # to 2000 px, gain too little from another JPEG generation to make
             # the added artifacts worthwhile.
-            preserve_source = max_dimension <= 1600 or (
-                max_dimension <= 2000 and source_size <= 400 * 1024
+            preserve_source = source.suffix.lower() in {".jpg", ".jpeg"} and (
+                max_dimension <= 1600
+                or (max_dimension <= 2000 and source_size <= 400 * 1024)
             )
 
             if preserve_source:
@@ -76,8 +89,12 @@ def main() -> int:
         print(f"{action} preview for {source.relative_to(site)}")
 
     for preview in sorted(projects.glob("*/images/previews/*.jpg")):
-        source = preview.parent.parent / preview.name
-        if not source.exists():
+        source_directory = preview.parent.parent
+        source_exists = any(
+            (source_directory / f"{preview.stem}{extension}").exists()
+            for extension in (".jpg", ".jpeg", ".png")
+        )
+        if not source_exists:
             preview.unlink()
             print(f"Removed stale preview {preview.relative_to(site)}")
 

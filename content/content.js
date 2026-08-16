@@ -22,6 +22,8 @@
  *   `imageCredit`, `imageSource` and a useful `imageAlt`.
  * - `media` creates a curated local photo/video edit. Every item needs a type,
  *   local src, useful alt text and confirmed public portfolio permission.
+ * - Videos may add `originalSrc` for an untouched HEVC/HDR source. Compatible
+ *   browsers use it in the detail view; the H.264 `src` remains the fallback.
  */
 
 const SITE = {
@@ -286,6 +288,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/about-you-fashion-circus-2024/videos/video-01.mp4",
+        originalSrc: "assets/projects/about-you-fashion-circus-2024/videos/originals/video-01.mp4",
         poster: "assets/projects/about-you-fashion-circus-2024/images/video-01-poster.jpg",
         alt: "Arrival atmosphere at the ABOUT YOU Fashion Circus",
         hero: true,
@@ -293,6 +296,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/about-you-fashion-circus-2024/videos/video-02.mp4",
+        originalSrc: "assets/projects/about-you-fashion-circus-2024/videos/originals/video-02.mp4",
         poster: "assets/projects/about-you-fashion-circus-2024/images/video-02-poster.jpg",
         alt: "Fashion and circus performance inside the big top",
         hero: true,
@@ -306,6 +310,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/about-you-fashion-circus-2024/videos/video-03.mp4",
+        originalSrc: "assets/projects/about-you-fashion-circus-2024/videos/originals/video-03.mp4",
         poster: "assets/projects/about-you-fashion-circus-2024/images/video-03-poster.jpg",
         alt: "Runway moment during ABOUT YOU Fashion Circus",
         hero: true,
@@ -319,6 +324,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/about-you-fashion-circus-2024/videos/video-04.mp4",
+        originalSrc: "assets/projects/about-you-fashion-circus-2024/videos/originals/video-04.mp4",
         poster: "assets/projects/about-you-fashion-circus-2024/images/video-04-poster.jpg",
         alt: "Finale atmosphere at the ABOUT YOU Fashion Circus",
         hero: true,
@@ -360,6 +366,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/ewa-herzog-wrapped-in-silence-2024/videos/video-01.mp4",
+        originalSrc: "assets/projects/ewa-herzog-wrapped-in-silence-2024/videos/originals/video-01.mp4",
         poster: "assets/projects/ewa-herzog-wrapped-in-silence-2024/images/video-01-poster.jpg",
         alt: "Ewa Herzog branding at the head of the KÖNIG GALERIE runway",
         hero: true,
@@ -367,6 +374,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/ewa-herzog-wrapped-in-silence-2024/videos/video-02.mp4",
+        originalSrc: "assets/projects/ewa-herzog-wrapped-in-silence-2024/videos/originals/video-02.mp4",
         poster: "assets/projects/ewa-herzog-wrapped-in-silence-2024/images/video-02-poster.jpg",
         alt: "Models walking the Ewa Herzog Spring Summer 2025 finale",
         hero: true,
@@ -609,7 +617,7 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-02.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-02.png",
         alt: "Metropolis Remix bags presented in a spacious illuminated installation",
         hero: true,
       },
@@ -621,7 +629,7 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-04.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-04.png",
         alt: "Unica Furla Earth Limited Edition presentation and floral installation",
         hero: true,
       },
@@ -633,7 +641,7 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-06.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-06.png",
         alt: "Metropolis Remix sound installation addressing gender inequality in music",
         hero: true,
       },
@@ -645,7 +653,7 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-08.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-08.png",
         alt: "Illuminated presentation of colourful Furla bags",
         hero: true,
         preview: false,
@@ -659,28 +667,28 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-10.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-10.png",
         alt: "Furla presentation screen featuring the Unica campaign",
         hero: true,
         preview: false,
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-11.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-11.png",
         alt: "Metropolis Remix presentation with campaign projection and product display",
         hero: true,
         preview: false,
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-12.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-12.png",
         alt: "Light-frame installation carrying the Furla identity",
         hero: true,
         preview: false,
       },
       {
         type: "image",
-        src: "assets/projects/furla-mfw-2022-2023/images/image-13.jpg",
+        src: "assets/projects/furla-mfw-2022-2023/images/image-13.png",
         alt: "Furla presentation booth composed from screens and blue light",
         hero: true,
         preview: false,
@@ -824,6 +832,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/armani-beauty-bazaar-berlinale/videos/img_8749.mp4",
+        originalSrc: "assets/projects/armani-beauty-bazaar-berlinale/videos/originals/img_8749.mp4",
         poster: "assets/projects/armani-beauty-bazaar-berlinale/images/img_8749-poster.jpg",
         alt: "Guests moving through the late-night party at The Feuerle Collection",
         label: "Late-night atmosphere",
@@ -832,6 +841,7 @@ const PROJECTS = [
       {
         type: "video",
         src: "assets/projects/armani-beauty-bazaar-berlinale/videos/img_8750.mp4",
+        originalSrc: "assets/projects/armani-beauty-bazaar-berlinale/videos/originals/img_8750.mp4",
         poster: "assets/projects/armani-beauty-bazaar-berlinale/images/img_8750-poster.jpg",
         alt: "DJ performance during the Armani Beauty and Harper’s Bazaar evening",
         label: "DJ set",
@@ -929,7 +939,7 @@ const PROJECTS = [
     media: [
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/cover.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/cover.png",
         alt: "Illuminated M·A·C installation featuring Palina Rojinski",
         hero: true,
         size: "lg",
@@ -943,31 +953,31 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/image-01.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/image-01.png",
         alt: "Palina Rojinski and guests at the M·A·C launch event",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/image-02.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/image-02.png",
         alt: "Portrait installation for the limited-edition M·A·C lipstick",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/image-03.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/image-03.png",
         alt: "Event guests in front of the M·A·C and Palina Rojinski backdrop",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/image-04.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/image-04.png",
         alt: "Close-up of the graphic event installation",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/mac-palina-rojinski-2018/images/image-05.jpg",
+        src: "assets/projects/mac-palina-rojinski-2018/images/image-05.png",
         alt: "M·A·C launch setting with red graphic accents",
         hero: true,
       },
@@ -1030,7 +1040,7 @@ const PROJECTS = [
     media: [
       {
         type: "image",
-        src: "assets/projects/bulgari-bzero1-berlin-2021/images/cover.jpg",
+        src: "assets/projects/bulgari-bzero1-berlin-2021/images/cover.png",
         alt: "Oversized BVLGARI B.zero1 ring installation at the Berlin launch",
         hero: true,
         size: "lg",
@@ -1051,7 +1061,7 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/bulgari-bzero1-berlin-2021/images/image-01.jpg",
+        src: "assets/projects/bulgari-bzero1-berlin-2021/images/image-01.png",
         alt: "BVLGARI B.zero1 event installation viewed across the venue",
         hero: true,
       },
@@ -1154,37 +1164,37 @@ const PROJECTS = [
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-02.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-02.png",
         alt: "Art Deco-inspired Golden Gala event setting",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-03.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-03.png",
         alt: "Guests and live entertainment at The Ritz-Carlton reopening",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-04.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-04.png",
         alt: "Golden performance tableau during the grand reopening",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-05.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-05.png",
         alt: "The Ritz-Carlton Berlin lobby staged for The Golden Gala",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-06.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-06.png",
         alt: "Live musicians performing at The Golden Gala",
         hero: true,
       },
       {
         type: "image",
-        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-07.jpg",
+        src: "assets/projects/ritz-carlton-golden-gala-2019/images/image-07.png",
         alt: "Art Deco costume and choreography at the reopening celebration",
         hero: true,
       },
