@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-"""Stamp the stylesheet link with a hash of the stylesheet itself.
+"""Stamp static asset URLs with content-derived hashes.
 
 The pages reference `styles.css?v=...` with a hand-written version string. If
 that string is not bumped when the CSS changes, browsers keep serving the copy
 they cached under the old URL — the change is live but nobody sees it.
 
-Deriving the value from the file's contents removes the manual step: it changes
-exactly when the CSS changes, and not otherwise, so caches stay warm between
-deploys that do not touch it.
-
-Scripts and content files are already loaded with a timestamp by the inline
-loader in each page, so they do not need this.
+Deriving the values from the file contents removes the manual step: URLs change
+when the files change and stay stable otherwise. That lets GitHub Pages, its CDN
+and visitors' browsers reuse the files between page loads.
 
 Usage:  python3 scripts/bust-cache.py <site-directory>
 """
@@ -21,6 +18,15 @@ import re
 import sys
 
 STYLESHEET = "styles.css"
+SCRIPT_FILES = ("content/content.js", "content/cv.js", "script.js", "legal.js")
+
+
+def file_hash(paths):
+    digest = hashlib.sha256()
+    for path in paths:
+        with open(path, "rb") as handle:
+            digest.update(handle.read())
+    return digest.hexdigest()[:12]
 
 
 def main():
@@ -34,10 +40,16 @@ def main():
         print(f"::error::{STYLESHEET} not found in {site}")
         return 1
 
-    with open(stylesheet, "rb") as handle:
-        digest = hashlib.sha256(handle.read()).hexdigest()[:12]
+    stylesheet_digest = file_hash((stylesheet,))
+    script_paths = [os.path.join(site, path) for path in SCRIPT_FILES]
+    missing_scripts = [path for path in script_paths if not os.path.exists(path)]
+    if missing_scripts:
+        print(f"::error::missing script files: {', '.join(missing_scripts)}")
+        return 1
+    script_digest = file_hash(script_paths)
 
-    pattern = re.compile(r'(%s)\?v=[^"\']*' % re.escape(STYLESHEET))
+    stylesheet_pattern = re.compile(r'(%s)\?v=[^"\']*' % re.escape(STYLESHEET))
+    script_pattern = re.compile(r'(const\s+version\s*=\s*)["\'][^"\']*["\'](\s*;)')
     stamped = []
 
     for name in sorted(os.listdir(site)):
@@ -46,16 +58,26 @@ def main():
         path = os.path.join(site, name)
         with open(path, encoding="utf-8") as handle:
             source = handle.read()
-        updated, count = pattern.subn(r"\1?v=%s" % digest, source)
-        if count:
+        updated, style_count = stylesheet_pattern.subn(
+            r"\1?v=%s" % stylesheet_digest,
+            source,
+        )
+        updated, script_count = script_pattern.subn(
+            r'\1"%s"\2' % script_digest,
+            updated,
+        )
+        if style_count or script_count:
             with open(path, "w", encoding="utf-8") as handle:
                 handle.write(updated)
-            stamped.append(f"{name} ({count})")
+            stamped.append(f"{name} (css: {style_count}, scripts: {script_count})")
 
     if not stamped:
-        print(f"::warning::no {STYLESHEET}?v= references found to stamp")
+        print("::warning::no static asset references found to stamp")
     else:
-        print(f"Stylesheet stamped v={digest} in: {', '.join(stamped)}")
+        print(
+            f"Assets stamped css={stylesheet_digest}, scripts={script_digest} in: "
+            + ", ".join(stamped)
+        )
     return 0
 
 

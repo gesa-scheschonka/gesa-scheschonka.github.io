@@ -2491,6 +2491,11 @@ img {
   }
 
   .dialog-private-collage-item--video {
+    grid-column: auto;
+    aspect-ratio: 9 / 16;
+  }
+
+  .dialog-private-collage-item--video.is-landscape {
     grid-column: 1 / -1;
     aspect-ratio: 16 / 9;
   }
